@@ -1,13 +1,20 @@
 from django.shortcuts import render , get_object_or_404
 from .models import Product
 from django.http import Http404
+from django.db.models import Avg , Min , Max
+
 
 # Create your views here.
 
 def Product_List(request):
     products = Product.objects.all()
+    number_of_products = products.count()
+    avg_rating = products.aggregate(Avg('rating'))
+
     return render(request, "Product_Module/product_list.html",{
-        'products': products
+        'products': products,
+        'total_number_of_products': number_of_products,
+        'average_rating': avg_rating,
     })
 
 def Product_Detail(request, product_slug):

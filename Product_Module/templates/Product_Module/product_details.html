@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block Title %}
+	{{ product.title }}
+{% endblock %}
+
+{% block Content %}
+	<h1>{{ product.title }}</h1>
+    <h2>Price: {{ product.price }}</h2>
+    <p>
+        {{ product.short_description }}
+    </p>
+
+
+{% endblock %}

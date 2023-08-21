@@ -12,7 +12,7 @@ class Product(models.Model):
     )
     short_description = models.CharField(max_length = 360, null = True)
     is_active = models.BooleanField(null = True)
-    slug = models.SlugField(default = "", null = False, db_index = True)
+    slug = models.SlugField(default = "", null = False, db_index = True, blank = True )#*, editable = False*# cant use with prepopulated_fields in admin
 
     def get_absolute_url( self ):
         return reverse('product-detail', args = [self.slug])

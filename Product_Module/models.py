@@ -11,7 +11,7 @@ class Product(models.Model):
         validators = [MinValueValidator(1), MaxValueValidator(5)], default = 0
     )
     short_description = models.CharField(max_length = 360, null = True)
-    is_active = models.BooleanField(null = True)
+    is_active = models.BooleanField(default = False)
     slug = models.SlugField(default = "", null = False, db_index = True, blank = True )#*, editable = False*# cant use with prepopulated_fields in admin
 
     def get_absolute_url( self ):

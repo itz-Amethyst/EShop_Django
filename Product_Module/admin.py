@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
 
-    list_display = ['__str__', 'price', 'rating', 'is_active','category']
+    list_display = ['__str__', 'price', 'rating', 'is_active','category', 'product_information']
     list_filter = ['rating', 'is_active']
     list_editable = ['rating', 'is_active']
 class Product_category_admin(admin.ModelAdmin):
@@ -18,3 +18,4 @@ class Product_category_admin(admin.ModelAdmin):
 
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.ProductCategory, Product_category_admin)
+admin.site.register(models.ProductInformation)

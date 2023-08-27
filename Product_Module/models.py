@@ -65,6 +65,9 @@ class Product(models.Model):
     is_active = models.BooleanField(default = False)
     slug = models.SlugField(default = "", null = False, db_index = True, blank = True )#*, editable = False*# cant use with prepopulated_fields in admin
 
+    def get_products_tags( self ):
+        return "\n - ".join([p.tag for p in self.product_tags.all()])
+
     def get_absolute_url( self ):
         return reverse('product-detail', args = [self.slug])
 

@@ -14,7 +14,7 @@ class ProductCategory(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length = 200)
-    category = models.ForeignKey(ProductCategory,on_delete = models.CASCADE, null = True) # models.PROTECT , models.SET_NULL
+    category = models.ForeignKey(ProductCategory,on_delete = models.CASCADE, null = True, related_name = 'products') # models.PROTECT , models.SET_NULL
     price = models.IntegerField()
     rating = models.IntegerField(
         validators = [MinValueValidator(1), MaxValueValidator(5)], default = 0

@@ -7,11 +7,11 @@ from django.db.models import Avg, Min, Max
 # Create your views here.
 
 def Product_List(request):
-    console = ProductCategory(title = "پلی استیشن", url_title = "playstation")
-    console.save()
-
-    ps_4 = Product(title = 'Ps5', price = 25000000, category = console, short_description = "play station 5 console", rating = 4, is_active = True)
-    ps_4.save()
+    # console = ProductCategory(title = "پلی استیشن", url_title = "playstation")
+    # console.save()
+    #
+    # ps_4 = Product(title = 'Ps5', price = 25000000, category = console, short_description = "play station 5 console", rating = 4, is_active = True)
+    # ps_4.save()
 
 
     products = Product.objects.all().order_by('-price') # if we add - , will order by descending

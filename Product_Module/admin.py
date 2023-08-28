@@ -9,13 +9,17 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
 
+    readonly_fields = ['created_date']
     list_display = ['__str__', 'price', 'is_active' ,'get_product_categories' , 'get_products_tags']
-    list_filter = ['is_active']
+    list_filter = ['title', 'category', 'is_active']
     list_editable = ['is_active']
 class Product_category_admin(admin.ModelAdmin):
     list_display = ['__str__','url_title']
     list_editable = ['url_title']
 
+class Product_Tags(admin.ModelAdmin):
+    list_display = ['__str__', 'get_tag_products']
+
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.ProductCategory, Product_category_admin)
-admin.site.register(models.ProductTag)
+admin.site.register(models.ProductTag, Product_Tags)

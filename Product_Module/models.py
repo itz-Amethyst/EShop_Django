@@ -21,7 +21,7 @@ class ProductCategory(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField(max_length = 200)
+    title = models.CharField(max_length = 200 , verbose_name = "نام محصول")
 
     category = models.ManyToManyField(
         ProductCategory,
@@ -36,15 +36,14 @@ class Product(models.Model):
     short_description = models.CharField(max_length = 360, db_index = True, null = True, verbose_name = "توضیحات کوتاه")
     description = models.TextField(verbose_name = "توضیحات تکمیلی")
     is_active = models.BooleanField(default = False, verbose_name = "فعال / غیرفعال")
-    slug = models.SlugField(default = "", null = False, db_index = True, blank = True, unique = True )#*, editable = False*# cant use with prepopulated_fields in admin
+    slug = models.SlugField(default = "", null = False, db_index = True, blank = True, unique = True, verbose_name = "عنوان در Url" )#*, editable = False*# cant use with prepopulated_fields in admin
     is_deleted = models.BooleanField(verbose_name = "حذف شده / نشده") ## Same as Is active IDK Why he added
     created_date = models.DateTimeField(verbose_name = "تاریخ ساخت" , default = datetime.now)
 
     def get_products_tags( self ):
-        return "\n - ".join([p.tag for p in self.product_tags.all()])
+        return "\n - ".join([p.caption for p in self.product_tags.all()])
     def get_product_categories( self ):
         return "\n - ".join([p.title for p in self.category.all()])
-
     def get_absolute_url( self ):
         return reverse('product-detail', args = [self.slug])
 
@@ -64,6 +63,9 @@ class ProductTag(models.Model):
     caption = models.CharField(max_length = 200, db_index = True, verbose_name = "عنوان")
 
     product = models.ForeignKey(Product , verbose_name = "تگ های محصول" , related_name = 'product_tags', on_delete = models.CASCADE)
+
+    def get_tag_products( self ):
+        return "\n - ".join([p.product.title for p in self.product.product_tags.all()])
 
     class Meta:
         verbose_name = 'تگ محصول'

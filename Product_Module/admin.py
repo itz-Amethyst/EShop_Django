@@ -9,7 +9,9 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
 
-    readonly_fields = ['created_date']
+    exclude = ['created_date']
+
+    # readonly_fields = ['created_date']
     list_display = ['__str__', 'price', 'is_active' ,'get_product_categories' , 'get_products_tags']
     list_filter = ['title', 'category', 'is_active']
     list_editable = ['is_active']

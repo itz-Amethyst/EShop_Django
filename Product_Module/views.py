@@ -16,14 +16,14 @@ def Product_List(request):
 
     products = Product.objects.all().order_by('-price') # if we add - , will order by descending
     number_of_products = products.count()
-    avg_rating = products.aggregate(Avg('rating'))
+    # avg_rating = products.aggregate(Avg('rating'))
     min_price = products.aggregate(Min('price'))
     max_price = products.aggregate(Max('price'))
 
     return render(request, "Product_Module/product_list.html",{
         'products': products,
         'total_number_of_products': number_of_products,
-        'average_rating': avg_rating,
+        # 'average_rating': avg_rating,
         'min_price': min_price,
         'max_price': max_price
     })

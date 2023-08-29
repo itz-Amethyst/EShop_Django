@@ -51,7 +51,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default = False, verbose_name = "فعال / غیرفعال")
     slug = models.SlugField(default = "", null = False, db_index = True, blank = True, unique = True, verbose_name = "عنوان در Url" )#*, editable = False*# cant use with prepopulated_fields in admin
     is_deleted = models.BooleanField(verbose_name = "حذف شده / نشده") ## Same as Is active IDK Why he added
-    created_date = models.DateTimeField(verbose_name = "تاریخ ساخت" , default = datetime.now)
+    created_date = models.DateTimeField(verbose_name = "تاریخ ساخت" ,auto_now_add = True)
 
     def get_products_tags( self ):
         return "\n - ".join([p.caption for p in self.product_tags.all()])

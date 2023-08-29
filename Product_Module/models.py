@@ -19,6 +19,17 @@ class ProductCategory(models.Model):
         verbose_name = 'دسته بندی'
         verbose_name_plural = 'دسته بندی ها'
 
+class ProductBrand(models.Model):
+    title = models.CharField(max_length = 300, verbose_name = "نام برند", db_index = True)
+    is_active = models.BooleanField(default = False, verbose_name = "فعال / غیر فعال")
+
+    class Meta:
+        verbose_name = "برند"
+        verbose_name_plural = "برندها"
+
+    def __str__(self):
+        return self.title
+
 
 class Product(models.Model):
     title = models.CharField(max_length = 200 , verbose_name = "نام محصول")
@@ -27,6 +38,8 @@ class Product(models.Model):
         ProductCategory,
         related_name = 'product_categories',
         verbose_name ='دسته بندی ها') # models.PROTECT , models.SET_NULL
+
+    brand = models.ForeignKey(ProductBrand, on_delete = models.CASCADE,verbose_name = "برند", related_name = "product_brands", null = True, blank = True) ## blank = true will accept null or empty
     price = models.IntegerField(verbose_name = "قیمت")
 
     # rating = models.IntegerField(

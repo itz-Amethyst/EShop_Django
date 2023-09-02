@@ -16,10 +16,8 @@ class HomeView(TemplateView):
         context['data'] = 'this is data in home page'
         return context
 
-def site_header_component(request):
-    return render(request, 'shared/components/header.html', {
-        'link': 'آموزش پایتون'
-    })
 
-def site_footer_component(request):
-    return render(request, 'shared/components/footer.html', {})
+class Site_Header_Component_View(TemplateView):
+    template_name = 'shared/components/header.html'
+class Site_Footer_Component_View(TemplateView):
+    template_name = 'shared/components/footer.html'

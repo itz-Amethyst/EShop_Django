@@ -28,7 +28,7 @@
 {#                            {% if has_error %}#}
 {#                                <p class="alert alert-warning">لطفا ایمیل خود را وارد نمایید</p>#}
 {#                            {% endif %}#}
-                            {% for field in contact_form %}
+                            {% for field in form %}
                                 <div class="{% if field.id_for_label == "id_full_name" or field.id_for_label == "id_email" %} col-md-6{% else %} col-md-12 {% endif %} form-group">
                                     {{ field.label_tag }}
                                     {{ field }}

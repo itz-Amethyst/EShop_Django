@@ -24,7 +24,7 @@ class ProductDetailView(TemplateView):
     def get_context_data( self , **kwargs ):
         context = super().get_context_data()
         slug = kwargs['slug']
-        product = get_object_or_404(Product , slug = slug)
+        product = get_object_or_404(Product, slug = slug)
         context['product'] = product
         return context
 

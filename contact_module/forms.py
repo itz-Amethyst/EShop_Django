@@ -95,3 +95,6 @@ class ContactUsModelForm(forms.ModelForm):
 
         # fields = '__all__'
         # exclude = ['response'] will show all except response
+
+class ProfileForm(forms.Form):
+    user_image = forms.FileField()

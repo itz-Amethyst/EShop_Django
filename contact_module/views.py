@@ -1,11 +1,11 @@
 from django.shortcuts import render , redirect
-from .forms import ContactUsForm , ContactUsModelForm
+from .forms import ContactUsForm , ContactUsModelForm , ProfileForm
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse
 
-from .models import ContactUs
+from .models import ContactUs , UserProfile
 
 
 # Create your views here.
@@ -31,13 +31,23 @@ class ContactUsView(FormView):
 
 class CreateProfileView(View):
     def get( self, request ):
-        return render(request, 'contact_module/create-profile.html')
+        form = ProfileForm
+        return render(request, 'contact_module/create-profile.html',{
+            'form': form
+        })
 
     def post( self, request ):
-        print(request.FILES)
-        return redirect('create_profile')
+        submitted_form = ProfileForm(request.POST, request.FILES)
 
+        if submitted_form.is_valid():
+            print(request.FILES)
+            profile = UserProfile(image = request.FILES['user_image'])
+            profile.save()
+            return redirect('/contact-us/create-profile')
 
+        return render(request , 'contact_module/create-profile.html' , {
+            'form': submitted_form
+        })
 #? Function based view
 # def contact_us_page(request):
 #     #? Old Way

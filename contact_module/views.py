@@ -11,8 +11,8 @@ from .models import ContactUs
 # Create your views here.
 
 class ContactUsView(FormView):
+    model = ContactUs
     template_name = 'contact_module/contact-us.html'
-    form_class = ContactUsModelForm
     success_url = '/contact-us/'
 
     def form_valid(self, form):
@@ -28,6 +28,14 @@ class ContactUsView(FormView):
     #     return render(request, 'contact_module/contact-us.html',{
     #         'contact_form': contact_form
     #     })
+
+class CreateProfileView(View):
+    def get( self, request ):
+        return render(request, 'contact_module/create-profile.html')
+
+    def post( self, request ):
+        print(request.FILES)
+        return redirect('create_profile')
 
 
 #? Function based view

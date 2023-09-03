@@ -124,6 +124,7 @@ STATIC_URL = 'static/'
 
 # Custom added
 MEDIA_ROOT = BASE_DIR / 'Uploads'
+MEDIA_URL = '/medias/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'

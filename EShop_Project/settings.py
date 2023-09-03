@@ -122,6 +122,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Custom added
+MEDIA_ROOT = BASE_DIR / 'Uploads'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]

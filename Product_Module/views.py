@@ -13,6 +13,8 @@ class ProductListView(ListView):
     template_name = 'Product_Module/product_list.html'
     model = Product
     context_object_name = 'products'
+    ordering = ['-created_date']
+    paginate_by = 12
 
     # def get_queryset(self):
     #     base_query = super().get_queryset()
@@ -30,6 +32,13 @@ class ProductDetailView(DetailView):
     template_name = 'Product_Module/product_details.html'
     model = Product
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        loaded_product = self.object
+        request = self.request
+        favorite_product_id = request.session.get('product_favorites')
+        context['is_favorite'] = favorite_product_id == str(loaded_product.id)
+        return context
 
     # def get_context_data(self, **kwargs):
     #     products = Product.objects.all().order_by('-price')[5]
@@ -38,10 +47,10 @@ class ProductDetailView(DetailView):
     #     return context
 
 class AddProductFavoriteView(View):
-    def post( self, request ):
+    def post( self, request):
         product_id = request.POST['product_id']
         product = Product.objects.get(pk = product_id)
-        request.session["product_favorite"] = product_id
+        request.session["product_favorites"] = product_id
         return redirect(product.get_absolute_url())
 
 

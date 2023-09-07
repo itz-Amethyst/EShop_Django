@@ -1,6 +1,6 @@
-from django.shortcuts import render , get_object_or_404
-from django.views.generic.base import TemplateView
-from django.views.generic import ListView , DetailView
+from django.shortcuts import render , get_object_or_404 , redirect
+from django.views.generic.base import TemplateView , View
+from django.views.generic import ListView, DetailView
 
 from .models import Product, ProductCategory
 from django.http import Http404
@@ -14,10 +14,10 @@ class ProductListView(ListView):
     model = Product
     context_object_name = 'products'
 
-    def get_queryset(self):
-        base_query = super().get_queryset()
-        data = base_query.filter(is_active = True)
-        return data
+    # def get_queryset(self):
+    #     base_query = super().get_queryset()
+    #     data = base_query.filter(is_active = True)
+    #     return data
 
     # def get_context_data( self , **kwargs ):
     #     context = super().get_context_data()
@@ -36,6 +36,14 @@ class ProductDetailView(DetailView):
     #     context = super().get_context_data()
     #     context['products'] = products
     #     return context
+
+class AddProductFavoriteView(View):
+    def post( self, request ):
+        product_id = request.POST['product_id']
+        product = Product.objects.get(pk = product_id)
+        request.session["product_favorite"] = product_id
+        return redirect(product.get_absolute_url())
+
 
 # def Product_List(request):
 #     # console = ProductCategory(title = "پلی استیشن", url_title = "playstation")

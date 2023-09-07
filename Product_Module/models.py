@@ -38,6 +38,7 @@ class Product(models.Model):
         ProductCategory,
         related_name = 'product_categories',
         verbose_name ='دسته بندی ها') # models.PROTECT , models.SET_NULL
+    image = models.ImageField(upload_to = 'images/products', null = True, blank = True, verbose_name = 'تصویر محصول')
 
     brand = models.ForeignKey(ProductBrand, on_delete = models.CASCADE,verbose_name = "برند", related_name = "product_brands", null = True, blank = True) ## blank = true will accept null or empty
     price = models.IntegerField(verbose_name = "قیمت")
@@ -58,7 +59,7 @@ class Product(models.Model):
     def get_product_categories( self ):
         return "\n - ".join([p.title for p in self.category.all()])
     def get_absolute_url( self ):
-        return reverse('product-detail', args = [self.slug])
+        return reverse('product-detail', kwargs = {'slug':self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

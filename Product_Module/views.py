@@ -13,8 +13,8 @@ class ProductListView(ListView):
     template_name = 'Product_Module/product_list.html'
     model = Product
     context_object_name = 'products'
-    ordering = ['-created_date']
-    paginate_by = 12
+    # ordering = ['-created_date']
+    # paginate_by = 12
 
     # def get_queryset(self):
     #     base_query = super().get_queryset()

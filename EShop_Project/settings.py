@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Product_Module',
+    # internal apps
+    'Account_Module',
     'Home_Module',
-    'django_render_partial',
-    'contact_module'
+    'Product_Module',
+    'contact_module',
+    # external apps
+    'django_render_partial'
+
 ]
 
 MIDDLEWARE = [
@@ -84,6 +88,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+#! Note: If you tell the auth User like this Account_Module.Models.User with importing way it would cause an error !
+AUTH_USER_MODEL = 'Account_Module.User'
 
 
 # Password validation

@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render , redirect
 from django.urls import reverse
 from django.views import View
-from Account_Module.forms import RegisterForm
+from Account_Module.forms import RegisterForm , LoginForm
 from Account_Module.models import User
 from django.utils.crypto import get_random_string
 
@@ -47,12 +47,12 @@ class RegisterView(View):
 
 class LoginView(View):
     def get( self , request ):
-        register_form = RegisterForm()
+        login_form = LoginForm()
         context = {
-            'login_form': None
+            'login_form': login_form
         }
 
-        return render(request , 'Account_Module/register.html' , context)
+        return render(request , 'Account_Module/login.html' , context)
 
     def post( self , request ):
         pass

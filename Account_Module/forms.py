@@ -65,6 +65,21 @@ class LoginForm(forms.Form):
     def __init__( self , *args , **kwargs ):
         super(LoginForm , self).__init__(*args , **kwargs)
         add_form_control_to_fields(self)
-
 # ! Use modelForm when you have fully customizable model because it will read validations and stuffs from model
+
+class Forget_Password_Form(forms.Form):
+    email = forms.EmailField(
+        label = 'ایمیل' ,
+        widget = forms.EmailInput() ,
+        validators = [
+            validators.MaxLengthValidator(100) ,
+            validators.EmailValidator
+        ]
+    )
+
+    def __init__( self , *args , **kwargs ):
+        super(Forget_Password_Form , self).__init__(*args , **kwargs)
+        add_form_control_to_fields(self)
+
+
 

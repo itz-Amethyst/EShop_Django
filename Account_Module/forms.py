@@ -2,6 +2,10 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 
+def add_form_control_to_fields(form):
+    for visible in form.visible_fields():
+        visible.field.widget.attrs['class'] = 'form-control'
+
 class RegisterForm(forms.Form):
     email = forms.EmailField(
         label = 'ایمیل' ,
@@ -26,6 +30,10 @@ class RegisterForm(forms.Form):
             validators.MaxLengthValidator(100) ,
         ]
     )
+
+    def __init__( self , *args , **kwargs ):
+        super(RegisterForm , self).__init__(*args , **kwargs)
+        add_form_control_to_fields(self)
 
     def clean_confirm_password( self ):
         password = self.cleaned_data.get('password')
@@ -54,6 +62,9 @@ class LoginForm(forms.Form):
         ]
     )
 
+    def __init__( self , *args , **kwargs ):
+        super(LoginForm , self).__init__(*args , **kwargs)
+        add_form_control_to_fields(self)
 
 # ! Use modelForm when you have fully customizable model because it will read validations and stuffs from model
 

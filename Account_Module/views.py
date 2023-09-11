@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.http import Http404
 from django.shortcuts import render , redirect
 from django.urls import reverse
@@ -55,7 +56,29 @@ class LoginView(View):
         return render(request , 'Account_Module/login.html' , context)
 
     def post( self , request ):
-        pass
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            user_email = login_form.cleaned_data.get("email")
+            user_password = login_form.cleaned_data.get("password")
+            user: User = User.objects.filter(email__iexact = user_email).first()
+            if user != None:
+                if not user.is_active:
+                    login_form.add_error('email', 'حساب کاربری شما فعال نشده است')
+                else:
+                    is_password_correct = user.check_password(user_password)
+                    if is_password_correct:
+                        login(request, user)
+                        return redirect(reverse('home_page'))
+                    else:
+                        login_form.add_error('email', 'نام کاربری یا کلمه عبور اشتباه است')
+
+            else:
+                login_form.add_error('email', 'نام کاربری یا کلمه عبور اشتباه است')
+        context = {
+            'login_form': login_form
+        }
+
+        return render(request,'Account_Module/login.html',context)
 
 
 class ActivateAccountView(View):

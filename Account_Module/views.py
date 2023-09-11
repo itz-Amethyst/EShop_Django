@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import render , redirect
 from django.urls import reverse
 from django.views import View
-from Account_Module.forms import RegisterForm , LoginForm
+from Account_Module.forms import RegisterForm , LoginForm , Forget_Password_Form
 from Account_Module.models import User
 from django.utils.crypto import get_random_string
 
@@ -95,3 +95,24 @@ class ActivateAccountView(View):
                 pass
                 # Todo show you account was activated
         raise Http404
+
+
+class ForgetPassword(View):
+    def get( self, request ):
+        forget_password_form = Forget_Password_Form
+
+        return render(request, 'Account_Module/forget_password.html', context = {
+            'forget_password_form': forget_password_form
+        })
+    def post( self, request ):
+
+        forget_password_form = Forget_Password_Form(request.POST)
+        if forget_password_form.is_valid():
+            user_email = forget_password_form.cleaned_data.get("email")
+            user : User = User.objects.filter(email__iexact = user_email).first()
+            if != None:
+                user.
+
+        return render(request , 'Account_Module/forget_password.html' , context = {
+            'forget_password_form': forget_password_form
+        })

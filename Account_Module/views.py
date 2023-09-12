@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login , logout
 from django.http import Http404
 from django.shortcuts import render , redirect
 from django.urls import reverse
@@ -37,7 +37,7 @@ class RegisterView(View):
 
                 print(register_form.cleaned_data)
 
-                send_email('فعال سازی حساب کاربری', new_user.email, {'user': new_user}, 'emails/active_account.html')
+                send_email('فعال سازی حساب کاربری' , new_user.email , {'user': new_user} , 'emails/activate_account.html')
                 return redirect(reverse('login_page'))
             return redirect('/')
 
@@ -98,7 +98,7 @@ class ActivateAccountView(View):
         raise Http404
 
 
-class ForgetPassword(View):
+class ForgetPasswordView(View):
     def get( self , request ):
         forget_password_form = Forget_Password_Form
 
@@ -106,20 +106,23 @@ class ForgetPassword(View):
             'forget_password_form': forget_password_form
         })
 
-    def post( self , request ):
+    def post(self, request):
 
         forget_password_form = Forget_Password_Form(request.POST)
         if forget_password_form.is_valid():
             user_email = forget_password_form.cleaned_data.get("email")
             user: User = User.objects.filter(email__iexact = user_email).first()
             if user != None:
-                pass
-        return render(request , 'Account_Module/forget_password.html' , context = {
+                send_email('بازیابی کلمه عبور', user.email, {'user': user}, 'emails/forget_password.html')
+                return redirect(reverse('home_page'))
+            else:
+                forget_password_form.add_error('email', 'کاربری با این ایمیل یافت نشد')
+        return render(request, 'Account_Module/forget_password.html', context = {
             'forget_password_form': forget_password_form
         })
 
 
-class ResetPassword(View):
+class ResetPasswordView(View):
     def get( self , request , active_code ):
         # Todo change this later to forget_password_code and create it in model
         user: User = User.objects.filter(email_active_code__iexact = active_code).first()
@@ -130,15 +133,15 @@ class ResetPassword(View):
         reset_password_form = Reset_Password_Form
 
         return render(request , 'Account_Module/reset_password.html' , context = {
-            'reset_password_form': reset_password_form,
+            'reset_password_form': reset_password_form ,
             'user': user
         })
 
     def post( self , request , active_code ):
-        reset_pass_form = Reset_Password_Form(request.POST)
+        reset_password_form = Reset_Password_Form(request.POST)
         user: User = User.objects.filter(email_active_code__iexact = active_code).first()
-        if reset_pass_form.is_valid():
-            user_new_password = reset_pass_form.cleaned_data.get('password')
+        if reset_password_form.is_valid():
+            user_new_password = reset_password_form.cleaned_data.get('password')
 
             if user == None:
                 return redirect(reverse('login_page'))
@@ -150,9 +153,15 @@ class ResetPassword(View):
             user.save()
             return redirect(reverse('login_page'))
 
-        reset_password_form = Reset_Password_Form
 
         return render(request , 'Account_Module/reset_password.html' , context = {
             'reset_password_form': reset_password_form ,
             'user': user
         })
+
+
+class LogoutView(View):
+    @staticmethod
+    def get(request):
+        logout(request)
+        return redirect(reverse('home_page'))

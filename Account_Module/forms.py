@@ -69,8 +69,9 @@ class LoginForm(forms.Form):
 
 class Forget_Password_Form(forms.Form):
     email = forms.EmailField(
-        label = 'ایمیل' ,
-        widget = forms.EmailInput() ,
+        label = 'ایمیل',
+        widget = forms.EmailInput(),
+        required = True,
         validators = [
             validators.MaxLengthValidator(100) ,
             validators.EmailValidator
@@ -80,9 +81,6 @@ class Forget_Password_Form(forms.Form):
     def __init__( self , *args , **kwargs ):
         super(Forget_Password_Form , self).__init__(*args , **kwargs)
         add_form_control_to_fields(self)
-
-
-
 
 
 class Reset_Password_Form(forms.Form):
@@ -101,7 +99,7 @@ class Reset_Password_Form(forms.Form):
         ]
     )
 
-    def clean_confirm_password( self ):
+    def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
 

@@ -99,7 +99,7 @@ class ActivateAccountView(View):
 
 
 class ForgetPasswordView(View):
-    def get( self , request ):
+    def get(self, request):
         forget_password_form = Forget_Password_Form
 
         return render(request , 'Account_Module/forget_password.html' , context = {

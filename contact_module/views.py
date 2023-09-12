@@ -1,4 +1,6 @@
 from django.shortcuts import render , redirect
+
+from Site_Module.models import SiteSetting
 from .forms import ContactUsForm , ContactUsModelForm
 from django.views import View
 from django.views.generic import ListView
@@ -10,11 +12,17 @@ from .models import ContactUs , UserProfile
 
 # Create your views here.
 
-class ContactUsView(FormView):
+class ContactUsView(CreateView):
     form_class = ContactUsModelForm
-    model = ContactUs
     template_name = 'contact_module/contact-us.html'
     success_url = '/contact-us/'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        setting: SiteSetting.objects.filter(is_main_setting = True).first()
+        context['site_setting'] = setting
+
+        return context
 
     def form_valid(self, form):
         form.save()

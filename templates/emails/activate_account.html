@@ -1,0 +1,10 @@
+<div class="rtl">
+    <h2>فعال سازی حساب کاربری</h2>
+    <hr>
+{#    <p> کاربر گرامی {{ user.get_username }}, جهت فعالسازی حساب کاربری خود روی لینک زیر کلیک کنید </p>#}
+    <p> کاربر گرامی {{ user.email }}, جهت فعالسازی حساب کاربری خود روی لینک زیر کلیک کنید </p>
+
+    <p>
+        <a href="http://localhost:8000{% url 'activate_page' email_active_code=user.email_active_code %}">فعال سازی حساب کاربری</a>
+    </p>
+</div>

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
 
-from Site_Module.models import SiteSetting
+from Site_Module.models import SiteSetting , FooterLinkBox
 
 
 # Create your views here.
@@ -23,7 +23,7 @@ class Site_Header_Component_View(TemplateView):
     template_name = 'shared/components/header.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+        context = super().get_context_data(**kwargs)
         setting: SiteSetting = SiteSetting.objects.filter(is_main_setting = True).first()
         context['site_setting'] = setting
         return context
@@ -31,8 +31,23 @@ class Site_Header_Component_View(TemplateView):
 class Site_Footer_Component_View(TemplateView):
     template_name = 'shared/components/footer.html'
 
-    def get_context_data( self , **kwargs ):
-        context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Todo add is active later and filter by is active to show
+        footer_link_boxes = FooterLinkBox.objects.all()
+        for item in footer_link_boxes:
+            item.footerlink_set
         setting: SiteSetting = SiteSetting.objects.filter(is_main_setting = True).first()
         context['site_setting'] = setting
+        context['footer_link_boxes'] = footer_link_boxes
+
+        return context
+
+class AboutUsView(TemplateView):
+    template_name = 'Home_Module/about_us.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        site_setting : SiteSetting = SiteSetting.objects.filter(is_main_setting = True).first()
+        context['site_setting'] = site_setting
         return context

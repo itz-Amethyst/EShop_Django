@@ -12,7 +12,8 @@ class User(AbstractUser):
         verbose_name_plural = 'کاربران'
 
     def __str__(self):
-        if (self.get_full_name() != None):
+        #! Have 2 way to fix this 1 by this long or change it inside a get_full_name method
+        if self.first_name is not '' and self.last_name is not '':
             return self.get_full_name()
 
         return self.email

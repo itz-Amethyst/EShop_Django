@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class ArticleCategory(models.Model):
+    parent = models.ForeignKey(to = 'ArticleCategory', null = True, blank = True, on_delete = models.CASCADE, verbose_name = 'دسته بندی والد')
     title = models.CharField(max_length = 200, verbose_name = 'عنوان دسته بندی')
     url_title = models.CharField(max_length = 200, verbose_name = 'عنوان در url', unique = True) # Unique_for_month har mah ye data unique darim
     is_active = models.BooleanField(verbose_name = 'فعال / غیرفعال', default = True)

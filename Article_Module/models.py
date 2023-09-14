@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 
+from Account_Module.models import User
+
 
 # Create your models here.
 
@@ -25,6 +27,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name = 'متن مقاله')
     is_active = models.BooleanField(default = True, verbose_name = 'فعال / غیرفعال')
     selected_categories = models.ManyToManyField(to = ArticleCategory, verbose_name = 'دسته بندی ها')
+    author = models.ForeignKey(to = User, on_delete = models.CASCADE, verbose_name = 'نویسنده', null = True, editable = False)
 
     class Meta:
         verbose_name = 'مقاله'

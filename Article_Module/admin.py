@@ -9,6 +9,7 @@ class ArticleCategoryAdmin(admin.ModelAdmin):
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ['title', 'make_short_description_shorter', 'is_active', 'get_selected_categories']
+    list_editable = ['is_active']
 
     # Note in admin it will display the name of def
     def make_short_description_shorter( self, obj ):

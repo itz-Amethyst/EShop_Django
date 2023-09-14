@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # internal apps
     'Account_Module',
     'Home_Module',
+    'Article_Module',
     'Product_Module',
     'contact_module',
     'Site_Module',

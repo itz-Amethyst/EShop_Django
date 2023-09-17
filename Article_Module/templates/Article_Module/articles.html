@@ -13,7 +13,7 @@
 				<div class="col-sm-9">
 					<div class="blog-post-area">
 						<h2 class="title text-center">آخریـن اخبـار</h2>
-
+                        {{ date }}
 						{% for article in page_obj %}
 
                             <div class="single-blog-post">
@@ -23,8 +23,8 @@
                                     {% if article.author is not none %}
 									    <li><i class="fa fa-user"></i> کاربـر:{{ article.author }} </li>
                                     {% endif %}
-									<li><i class="fa fa-clock-o"></i> 17:20 ب.ظ</li>
-									<li><i class="fa fa-calendar"></i> 28 تیـر 1397</li>
+									<li><i class="fa fa-clock-o"></i>{{ article.get_jalali_create_time }}</li>
+									<li><i class="fa fa-calendar"></i>{{ article.get_jalali_create_date }}</li>
 								</ul>
 								<span>
 										<i class="fa fa-star"></i>

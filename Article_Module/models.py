@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from jalali_date import date2jalali
 
 from Account_Module.models import User
 
@@ -28,6 +29,7 @@ class Article(models.Model):
     is_active = models.BooleanField(default = True, verbose_name = 'فعال / غیرفعال')
     selected_categories = models.ManyToManyField(to = ArticleCategory, verbose_name = 'دسته بندی ها')
     author = models.ForeignKey(to = User, on_delete = models.CASCADE, verbose_name = 'نویسنده', null = True, editable = False)
+    created_date = models.DateTimeField(auto_now_add = True, editable = False, verbose_name = 'تاریخ ایجاد')
 
     class Meta:
         verbose_name = 'مقاله'
@@ -42,3 +44,10 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_jalali_create_date(self):
+        return date2jalali(self.created_date)
+
+
+    def get_jalali_create_time(self):
+        return self.created_date.strftime('%H:%M')

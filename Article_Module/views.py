@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import ListView
 
 from Article_Module.models import Article
+from jalali_date import date2jalali , datetime2jalali
 
 
 # Create your views here.
@@ -26,3 +27,9 @@ class ArticlesView(ListView):
         base_query = super().get_queryset()
         data = base_query.filter(is_active = True)
         return data
+
+    def get_context_data(self,  *args, **kwargs):
+        context = super(ArticlesView, self).get_context_data(*args, **kwargs)
+        # context['date'] = datetime2jalali(self.request.user.date_joined).strftime('%y/%m/%d _ %H:%M:%S')
+        context['date'] = datetime2jalali(self.request.user.date_joined)
+        return context

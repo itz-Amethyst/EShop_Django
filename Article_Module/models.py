@@ -45,9 +45,11 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-    def get_jalali_create_date(self):
-        return date2jalali(self.created_date)
+    #! Another way to declare custom functions but its better to be added in polls custom tags
 
-
-    def get_jalali_create_time(self):
-        return self.created_date.strftime('%H:%M')
+    # def get_jalali_create_date(self):
+    #     return date2jalali(self.created_date)
+    #
+    #
+    # def get_jalali_create_time(self):
+    #     return self.created_date.strftime('%H:%M')

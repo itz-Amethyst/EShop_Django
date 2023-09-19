@@ -53,3 +53,15 @@ class Article(models.Model):
     #
     # def get_jalali_create_time(self):
     #     return self.created_date.strftime('%H:%M')
+
+class ArticleComment(models.Model):
+    article = models.ForeignKey(to = Article, on_delete = models.CASCADE, verbose_name = 'مقاله')
+    parent = models.ForeignKey(to = 'ArticleComment', on_delete = models.CASCADE, null = True, blank = True,  verbose_name = 'والد')
+    user = models.ForeignKey(to = User, on_delete = models.CASCADE, verbose_name = 'کاربر')
+    create_date = models.DateTimeField(auto_now_add = True, verbose_name = 'تاریخ ثبت')
+    text = models.TextField(verbose_name = 'متن نظر')
+    is_submitted = models.BooleanField(default = False, verbose_name = 'تایید شده / نشده')
+
+    class Meta:
+        verbose_name = 'نظر مقاله'
+        verbose_name_plural = 'نظرات مقالات'

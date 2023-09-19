@@ -1,10 +1,9 @@
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView , DetailView
 
 from Article_Module.models import Article , ArticleCategory
-from jalali_date import date2jalali , datetime2jalali
 
 
 # Create your views here.
@@ -21,8 +20,7 @@ class ArticlesView(ListView):
     model = Article
     context_object_name = 'articles'
     # ordering = ['-created_date']
-    # paginate_by = 1
-    paginate_by = 5
+    paginate_by = 1
 
     def get_queryset(self):
         data = []
@@ -46,3 +44,13 @@ def Article_Categories_Partial(request: HttpRequest):
         'main_categories': article_main_categories
     }
     return render(request, 'Article_Module/partials/article_categories.html', context)
+
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'Article_Module/article_view.html'
+
+    def get_queryset(self):
+        base_query = super().get_queryset()
+        data = base_query.filter(is_active = True)
+        return data

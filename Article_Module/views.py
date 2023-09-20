@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView , DetailView
 
-from Article_Module.models import Article , ArticleCategory
+from Article_Module.models import Article , ArticleCategory , ArticleComment
 
 
 # Create your views here.
@@ -54,3 +54,11 @@ class ArticleDetailView(DetailView):
         base_query = super().get_queryset()
         data = base_query.filter(is_active = True)
         return data
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        article: Article = kwargs.get('object')
+
+        context['comments'] = ArticleComment.objects.filter(article_id = article.id, is_submitted = True, parent = None).prefetch_related('articlecomment_set') # prefetch same as join in .net
+
+        return context

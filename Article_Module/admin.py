@@ -29,6 +29,9 @@ class ArticleAdmin(admin.ModelAdmin):
         return obj.short_description[:65]
 
 
+class ArticleCommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'is_submitted', 'create_date', 'parent']
+
 admin.site.register(models.ArticleCategory, ArticleCategoryAdmin)
 admin.site.register(models.Article, ArticleAdmin)
-admin.site.register(models.ArticleComment)
+admin.site.register(models.ArticleComment, ArticleCommentAdmin)

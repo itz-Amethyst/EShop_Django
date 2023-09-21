@@ -1,4 +1,4 @@
-from django.http import HttpRequest
+from django.http import HttpRequest , HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView , DetailView
@@ -59,11 +59,19 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data()
         article: Article = kwargs.get('object')
 
-        context['comments'] = ArticleComment.objects.filter(article_id = article.id, is_submitted = True, parent = None).prefetch_related('articlecomment_set') # prefetch same as join in .net
+        context['comments'] = (ArticleComment.objects.filter(article_id = article.id, is_submitted = True, parent = None)
+            .order_by('-create_date')
+            .prefetch_related('articlecomment_set')) # prefetch same as join in .net
 
         return context
 
 def add_article_comment(request: HttpRequest):
     if request.user.is_authenticated:
+        article_comment = request.GET.get('articleComment')
+        article_id = request.GET.get('articleId')
+        parent_Id = request.GET.get('parentId')
+        ArticleComment(article_id = article_id, text = article_comment, user_id = request.user.id, parent_id = parent_Id).save()
+        return HttpResponse('Succeeded')
 
-    return HttpRequest('response')
+    return HttpResponse('Failed')
+

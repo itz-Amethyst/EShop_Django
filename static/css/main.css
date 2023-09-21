@@ -2537,7 +2537,7 @@ h2.title {
   margin-left: 10px;
   padding: 0 0 0 10px;
   position: relative;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 
 .sinlge-post-meta li i {

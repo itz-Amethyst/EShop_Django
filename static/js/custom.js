@@ -7,13 +7,20 @@ function sendArticleComment(articleId){
         articleId : articleId,
         parentId: parentId
     }).then(res => {
-        console.log(res)
-        location.reload()
+        $('#comment_response').html(res)
+        $('#commentText').val('')
+        $('#parent_id').val('')
+        //! Note: Comment must be submitted by admin so these part is unusefull
+        if(parentId !== null && parentId !== ''){
+            document.getElementById('single_comment_box_' + parentId).scrollIntoView({behavior:"smooth"})
+        }
+        else{
+            document.getElementById('comment_response').scrollIntoView({behavior:"smooth"})
+        }
     });
 }
 
 function fillParentId(parentId) {
-    debugger
     $('#parent_id').val(parentId)
     document.getElementById('comment_form_scroll').scrollIntoView({behavior:"smooth"})
 }

@@ -63,6 +63,8 @@ class ArticleDetailView(DetailView):
             .order_by('-create_date')
             .prefetch_related('articlecomment_set')) # prefetch same as join in .net
 
+        context['comment_count'] = ArticleComment.objects.filter(article_id = article.id,  is_submitted = True, parent = None).count()
+
         return context
 
 def add_article_comment(request: HttpRequest):
@@ -71,7 +73,12 @@ def add_article_comment(request: HttpRequest):
         article_id = request.GET.get('articleId')
         parent_Id = request.GET.get('parentId')
         ArticleComment(article_id = article_id, text = article_comment, user_id = request.user.id, parent_id = parent_Id).save()
-        return HttpResponse('Succeeded')
-
-    return HttpResponse('Failed')
+        # Fix later
+        context = {
+            'comments': ArticleComment.objects.filter(article_id = article_id, is_submitted = True, parent_id = None)
+            .order_by('-create_date')
+            .prefetch_related('articlecomment_set'),
+            'comment_count': ArticleComment.objects.filter(article_id = article_id, is_submitted = True, parent = None).count()
+        }
+        return render(request, 'Article_Module/includes/article_comments_partial.html', context)
 

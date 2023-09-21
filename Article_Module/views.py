@@ -62,3 +62,8 @@ class ArticleDetailView(DetailView):
         context['comments'] = ArticleComment.objects.filter(article_id = article.id, is_submitted = True, parent = None).prefetch_related('articlecomment_set') # prefetch same as join in .net
 
         return context
+
+def add_article_comment(request: HttpRequest):
+    if request.user.is_authenticated:
+
+    return HttpRequest('response')

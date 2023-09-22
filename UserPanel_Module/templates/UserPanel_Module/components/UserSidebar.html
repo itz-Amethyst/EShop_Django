@@ -1,4 +1,13 @@
+{% load thumbnail %}
+
 <div class="col-md-4 pull-right">
+    {% if current_user.avatar %}
+        {% thumbnail current_user.avatar "170x170" crop='center' as im %}
+            <a class="thumbnail" href="">
+                <img src="{{ im.url }}" alt="">
+            </a>
+        {% endthumbnail %}
+    {% endif %}
     <ul class="list-group">
         <li class="list-group-item">
             <a href="{% url 'UserPanel_Dashboard' %}">

@@ -11,6 +11,7 @@ class ProductCategory(models.Model):
     title = models.CharField(max_length = 300, db_index = True, verbose_name = "عنوان")
     url_title = models.CharField(max_length = 300, db_index = True, verbose_name = "عنوان در url")
     is_active = models.BooleanField(verbose_name = "فعال / غیرفعال")
+    #? Implement paretn later if you want
 
     def __str__(self):
         return self.title

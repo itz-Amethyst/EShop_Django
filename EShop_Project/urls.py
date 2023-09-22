@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('Account_Module.urls')),
     path('products/', include('Product_Module.urls')),
     path('admin/', admin.site.urls),
+    path('user/', include('UserPanel_Module.urls')),
     path('contact-us/', include('contact_module.urls')),
     path('articles/', include('Article_Module.urls')),
 

@@ -39,7 +39,7 @@ class ArticlesView(ListView):
 
 
 def Article_Categories_Partial(request: HttpRequest):
-    article_main_categories = ArticleCategory.objects.filter(is_active = True, parent_id = None)
+    article_main_categories = ArticleCategory.objects.prefetch_related('articlecategory_set').filter(is_active = True, parent_id = None)
     context = {
         'main_categories': article_main_categories
     }
@@ -75,9 +75,10 @@ def add_article_comment(request: HttpRequest):
         ArticleComment(article_id = article_id, text = article_comment, user_id = request.user.id, parent_id = parent_Id).save()
         # Fix later
         context = {
-            'comments': ArticleComment.objects.filter(article_id = article_id, is_submitted = True, parent_id = None)
-            .order_by('-create_date')
-            .prefetch_related('articlecomment_set'),
+            'comments': ArticleComment.objects
+            .prefetch_related('articlecomment_set')
+            .filter(article_id = article_id, is_submitted = True, parent_id = None)
+            .order_by('-create_date'),
             'comment_count': ArticleComment.objects.filter(article_id = article_id, is_submitted = True, parent = None).count()
         }
         return render(request, 'Article_Module/includes/article_comments_partial.html', context)

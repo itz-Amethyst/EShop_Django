@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView , View
 from django.views.generic import ListView, DetailView
 
 from .models import Product, ProductCategory
-from django.http import Http404
+from django.http import Http404 , HttpRequest
 from django.db.models import Avg, Min, Max
 
 
@@ -15,6 +15,13 @@ class ProductListView(ListView):
     context_object_name = 'products'
     ordering = ['-created_date']
     paginate_by = 1
+
+    def get_queryset(self):
+        query = super().get_queryset()
+        category_name = self.kwargs.get('cat')
+        if category_name != None:
+            query = query.filter(category__url_title__iexact = category_name)
+        return query
 
     # def get_queryset(self):
     #     base_query = super().get_queryset()
@@ -53,6 +60,14 @@ class AddProductFavoriteView(View):
         request.session["product_favorites"] = product_id
         return redirect(product.get_absolute_url())
 
+
+def ProductCategories_Component(request: HttpRequest):
+    product_categories = ProductCategory.objects.filter(is_active = True,)
+    context = {
+        'categories': product_categories
+    }
+
+    return render(request, 'Product_Module/components/Product_Categories.html', context)
 
 # def Product_List(request):
 #     # console = ProductCategory(title = "پلی استیشن", url_title = "playstation")

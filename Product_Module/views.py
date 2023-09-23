@@ -2,9 +2,9 @@ from django.shortcuts import render , get_object_or_404 , redirect
 from django.views.generic.base import TemplateView , View
 from django.views.generic import ListView, DetailView
 
-from .models import Product, ProductCategory
+from .models import Product , ProductCategory , ProductBrand
 from django.http import Http404 , HttpRequest
-from django.db.models import Avg, Min, Max
+from django.db.models import Avg , Min , Max , Count
 
 
 # Create your views here.
@@ -19,6 +19,11 @@ class ProductListView(ListView):
     def get_queryset(self):
         query = super().get_queryset()
         category_name = self.kwargs.get('cat')
+        brand_name = self.kwargs.get('brand')
+
+        if category_name != None:
+            query = query.filter(brand__url_title__iexact = brand_name)
+
         if category_name != None:
             query = query.filter(category__url_title__iexact = category_name)
         return query
@@ -68,6 +73,16 @@ def ProductCategories_Component(request: HttpRequest):
     }
 
     return render(request, 'Product_Module/components/Product_Categories.html', context)
+
+
+def ProductBrands_Component(request: HttpRequest):
+    product_brands = ProductBrand.objects.annotate(products_count=Count('product')).filter(is_active = True)
+    context = {
+        'brands': product_brands
+    }
+
+    return render(request, 'Product_Module/components/Product_Brands.html', context)
+
 
 # def Product_List(request):
 #     # console = ProductCategory(title = "پلی استیشن", url_title = "playstation")

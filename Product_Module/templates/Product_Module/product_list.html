@@ -20,22 +20,21 @@
 
                             <div class="clearfix"></div>
                             <ul class="pagination">
-                                {#							<li class="active"><a href="">1</a></li>#}
-                                {#							<li><a href="">2</a></li>#}
-                                {#							<li><a href="">3</a></li>#}
-                                {#							<li><a href="">»</a></li>#}
+
                                 {% if page_obj.has_previous %}
-                                    <li><a class="fa fa-arrow-circle-right"
-                                           href="?page={{ page_obj.previous_page_number }}"> قبلی</a></li>
+                                    <li><a class="fa fa-arrow-circle-right cursor-pointer"
+                                           onclick="FillPage({{ page_obj.previous_page_number }})"> قبلی</a></li>
+                                {#      old way   href="?page={{ page_obj.previous_page_number }}                              #}
                                 {% endif %}
 
                                 {% for pageNumber in paginator.page_range %}
                                     <li class="{% if page_obj.number == pageNumber %} active {% endif %}"><a
-                                            href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                                            class="cursor-pointer"
+                                            onclick="FillPage({{ pageNumber }})">{{ pageNumber }}</a></li>
                                 {% endfor %}
 
                                 {% if page_obj.has_next %}
-                                    <li><a class="fa fa-arrow-circle-left" href="?page={{ page_obj.next_page_number }}">
+                                    <li><a class="fa fa-arrow-circle-left cursor-pointer" onclick="FillPage({{ page_obj.next_page_number }})">
                                         بعدی </a></li>
                                 {% endif %}
 
@@ -60,11 +59,23 @@
                         <div class="price-range"><!--price-range-->
                             <h2>فیلتـر قیمـت</h2>
                             <div class="well">
-                                <input type="text" class="span2" value="" data-slider-min="{{ start_price }}" data-slider-max="{{ db_max_price }}"
-                                       data-slider-step="5" data-slider-value="[{{ start_price }},{{ end_price }}]" id="sl2"><br/>
+                                <input type="text" class="span2" value="{{ start_price }},{{ end_price }}"
+                                       data-slider-min="{{ start_price }}" data-slider-max="{{ db_max_price }}"
+                                       data-slider-step="5" data-slider-value="[{{ start_price }},{{ end_price }}]"
+                                       id="sl2"><br/>
                                 <b>{{ db_max_price }}</b> <b class="pull-left">0</b>
                             </div>
                         </div><!--/price-range-->
+                        <div>
+                            <form action="" method="get" id="filter_form">
+                                <input type="hidden" name="start_price" id="start_price" value="{{ start_price }}">
+                                <input type="hidden" name="page" id="page" value="{{ page_obj.number }}">
+                                <input type="hidden" name="end_price" id="end_price" value="{{ end_price }}">
+                            </form>
+                            <button class="btn btn-success btn-block" onclick="FilterProducts()">
+                                فیلتر
+                            </button>
+                        </div>
 
                         <div class="shipping text-center"><!--shipping-->
                             <img src="/static/images/home/shipping.jpg" alt="">

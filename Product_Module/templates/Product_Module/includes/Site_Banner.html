@@ -1,0 +1,9 @@
+<div class="shipping text-center"><!--shipping-->
+    {% for bnr in banner %}
+        <a href="{{ bnr.url }}">
+            <img src="{{ bnr.image.url }}" alt="{{ bnr.title }}">
+        </a>
+        <br>
+        <br>
+    {% endfor %}
+</div>

@@ -1,8 +1,12 @@
+{% load thumbnail %}
+
 <div class="shipping text-center"><!--shipping-->
     {% for bnr in banner %}
-        <a href="{{ bnr.url }}">
-            <img src="{{ bnr.image.url }}" alt="{{ bnr.title }}">
-        </a>
+        {% thumbnail bnr.image "268x450" crop='center' as im %}
+            <a href="{{ bnr.url }}">
+                <img src="{{ im.url }}" alt="{{ bnr.title }}">
+            </a>
+        {% endthumbnail %}
         <br>
         <br>
     {% endfor %}

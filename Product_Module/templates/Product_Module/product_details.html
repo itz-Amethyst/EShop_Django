@@ -457,30 +457,28 @@
                             {% render_partial 'Product_Module.views.ProductBrands_Component' %}
                         </div><!--/brands_products-->
 
-                        <div class="price-range"><!--price-range-->
-                            <h2>فیلتـر قیمـت</h2>
-                            <div class="well">
-                                <div class="slider slider-horizontal" style="width: 182px;">
-                                    <div class="slider-track">
-                                        <div class="slider-selection" style="left: 0.025%; width: 0.0199999%;"></div>
-                                        <div class="slider-handle round left-round" style="left: 0.025%;"></div>
-                                        <div class="slider-handle round" style="left: 0.045%;"></div>
-                                    </div>
-                                    <div class="tooltip top" style="top: -30px; left: -37.4363px;">
-                                        <div class="tooltip-arrow"></div>
-                                        <div class="tooltip-inner">250 : 450</div>
-                                    </div>
-                                    <input type="text" class="span2" value="" data-slider-min="0"
-                                           data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"
-                                           id="sl2" style=""></div>
-                                <br>
-                                <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>
-                            </div>
-                        </div><!--/price-range-->
+{#                        <div class="price-range"><!--price-range-->#}
+{#                            <h2>فیلتـر قیمـت</h2>#}
+{#                            <div class="well">#}
+{#                                <div class="slider slider-horizontal" style="width: 182px;">#}
+{#                                    <div class="slider-track">#}
+{#                                        <div class="slider-selection" style="left: 0.025%; width: 0.0199999%;"></div>#}
+{#                                        <div class="slider-handle round left-round" style="left: 0.025%;"></div>#}
+{#                                        <div class="slider-handle round" style="left: 0.045%;"></div>#}
+{#                                    </div>#}
+{#                                    <div class="tooltip top" style="top: -30px; left: -37.4363px;">#}
+{#                                        <div class="tooltip-arrow"></div>#}
+{#                                        <div class="tooltip-inner">250 : 450</div>#}
+{#                                    </div>#}
+{#                                    <input type="text" class="span2" value="" data-slider-min="0"#}
+{#                                           data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"#}
+{#                                           id="sl2" style=""></div>#}
+{#                                <br>#}
+{#                                <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>#}
+{#                            </div>#}
+{#                        </div><!--/price-range-->#}
 
-                        <div class="shipping text-center"><!--shipping-->
-                            <img src="/static/images/home/shipping.jpg" alt="">
-                        </div><!--/shipping-->
+                        {% include 'Product_Module/includes/Site_Banner.html' with banner=banner %}
 
                     </div>
                 </div>

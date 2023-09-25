@@ -24,7 +24,7 @@
                                 {% if page_obj.has_previous %}
                                     <li><a class="fa fa-arrow-circle-right cursor-pointer"
                                            onclick="FillPage({{ page_obj.previous_page_number }})"> قبلی</a></li>
-                                {#      old way   href="?page={{ page_obj.previous_page_number }}                              #}
+                                    {#      old way   href="?page={{ page_obj.previous_page_number }}                              #}
                                 {% endif %}
 
                                 {% for pageNumber in paginator.page_range %}
@@ -34,7 +34,8 @@
                                 {% endfor %}
 
                                 {% if page_obj.has_next %}
-                                    <li><a class="fa fa-arrow-circle-left cursor-pointer" onclick="FillPage({{ page_obj.next_page_number }})">
+                                    <li><a class="fa fa-arrow-circle-left cursor-pointer"
+                                           onclick="FillPage({{ page_obj.next_page_number }})">
                                         بعدی </a></li>
                                 {% endif %}
 
@@ -77,9 +78,7 @@
                             </button>
                         </div>
 
-                        <div class="shipping text-center"><!--shipping-->
-                            <img src="/static/images/home/shipping.jpg" alt="">
-                        </div><!--/shipping-->
+                       {% include 'Product_Module/includes/Site_Banner.html' with banner=banner %}
 
                     </div>
                 </div>

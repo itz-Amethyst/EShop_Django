@@ -2,6 +2,8 @@ from django.shortcuts import render , get_object_or_404 , redirect
 from django.views.generic.base import TemplateView , View
 from django.views.generic import ListView, DetailView
 
+from Site_Module.models import SiteBanner
+from utils.Custom_Methods import SelectSiteBanner
 from .models import Product , ProductCategory , ProductBrand
 from django.http import Http404 , HttpRequest
 from django.db.models import Avg , Min , Max , Count
@@ -29,6 +31,7 @@ class ProductListView(ListView):
         # Can use this way but not dynamiced with db
         # context['end_price'] = self.request.GET.get('end_price') or Product.objects.aggregate(Max('price'))
         context['end_price'] = self.request.GET.get('end_price') or db_max_price
+        context['banner'] = SelectSiteBanner(SiteBanner.SiteBannerPositions.product_list)
         return context
 
     def get_queryset(self):
@@ -75,6 +78,7 @@ class ProductDetailView(DetailView):
         request = self.request
         favorite_product_id = request.session.get('product_favorites')
         context['is_favorite'] = favorite_product_id == str(loaded_product.id)
+        context['banner'] = SelectSiteBanner(SiteBanner.SiteBannerPositions.product_detail)
         return context
 
     # def get_context_data(self, **kwargs):

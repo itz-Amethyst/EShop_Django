@@ -14,14 +14,28 @@ class ProductListView(ListView):
     model = Product
     context_object_name = 'products'
     ordering = ['-created_date']
-    paginate_by = 1
+    paginate_by = 4
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['start_price'] = self.request.GET.get('start_price') or 0
+        context['end_price'] = self.request.GET.get('end_price') or Product.objects.aggregate(Max('price'))
+        return context
 
     def get_queryset(self):
         query = super().get_queryset()
         category_name = self.kwargs.get('cat')
         brand_name = self.kwargs.get('brand')
+        request: HttpRequest = self.request
+        start_price = request.GET.get('start_price')
+        end_price = request.GET.get('end_price')
+        if start_price != None:
+            query = query.filter(price__gte = start_price)
 
-        if category_name != None:
+        if end_price != None:
+            query = query.filter(price__lte = end_price)
+
+        if brand_name != None:
             query = query.filter(brand__url_title__iexact = brand_name)
 
         if category_name != None:
@@ -76,7 +90,7 @@ def ProductCategories_Component(request: HttpRequest):
 
 
 def ProductBrands_Component(request: HttpRequest):
-    product_brands = ProductBrand.objects.annotate(products_count=Count('product')).filter(is_active = True)
+    product_brands = ProductBrand.objects.annotate(products_count=Count('product_brands')).filter(is_active = True) # annotate name must be related name relation in Model
     context = {
         'brands': product_brands
     }

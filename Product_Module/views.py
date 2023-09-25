@@ -17,12 +17,23 @@ class ProductListView(ListView):
     paginate_by = 4
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        print("Runned: Context_Data")
         context = super().get_context_data()
+        query = Product.objects.all()
+        product: Product = query.order_by('-price').first()
+        # db_min_price = query.order_by('price').first().price
+        db_max_price = product.price if product is not None else 0
+
+        context['db_max_price'] = db_max_price
         context['start_price'] = self.request.GET.get('start_price') or 0
-        context['end_price'] = self.request.GET.get('end_price') or Product.objects.aggregate(Max('price'))
+        # Can use this way but not dynamiced with db
+        # context['end_price'] = self.request.GET.get('end_price') or Product.objects.aggregate(Max('price'))
+        context['end_price'] = self.request.GET.get('end_price') or db_max_price
         return context
 
     def get_queryset(self):
+        print("Runned: QuerySet")
+
         query = super().get_queryset()
         category_name = self.kwargs.get('cat')
         brand_name = self.kwargs.get('brand')

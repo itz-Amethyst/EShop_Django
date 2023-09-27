@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
@@ -21,7 +22,10 @@ class HomeView(TemplateView):
         context['data'] = 'this is data in home page'
 
         latest_products = Product.objects.filter(is_active = True, is_deleted = False).order_by('-created_date')[:12]
-        context['latest_products'] = Group_List(latest_products , 4)
+        most_visited_products = Product.objects.filter(is_active = True, is_deleted = False).annotate(visit_count = Count('productvisit')).order_by('-visit_count')[:12]
+
+        context['latest_products'] = Group_List(latest_products, 4)
+        context['most_visited_products'] = Group_List(most_visited_products, 4)
         print(Group_List(latest_products, 4))
 
         return context

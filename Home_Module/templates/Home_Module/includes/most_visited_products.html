@@ -1,3 +1,4 @@
+{% load poll_extras %}
 {% load thumbnail %}
 
 <div class="features_items"><!--RetailSale_items-->
@@ -16,7 +17,7 @@
                                                 <img src="{{ im.url }}" alt="{{ product.title }}">
                                             </a>
                                         {% endthumbnail %}
-                                        <h2>{{ product.price }}</h2>
+                                        <h2>{{ product.price | three_digits_divide_currency }}</h2>
                                         <p>{{ product.title }}</p>
                                         <a href="#" class="btn btn-default add-to-cart"><i
                                                 class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
@@ -24,7 +25,7 @@
                                     <a href="{{ product.get_absolute_url }}">
                                         <div class="product-overlay">
                                             <div class="overlay-content">
-                                                <h2>{{ product.price }}</h2>
+                                                <h2>{{ product.price | three_digits_divide_currency }}</h2>
                                                 <p>{{ product.title }}</p>
                                                 <a href="#" class="btn btn-default add-to-cart"><i
                                                         class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>

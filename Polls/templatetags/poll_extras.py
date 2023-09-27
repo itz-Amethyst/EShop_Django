@@ -11,3 +11,9 @@ def show_jalali_date(value):
 def show_jalali_time(value):
     return value.strftime('%H:%M')
 
+@register.filter(name = 'three_digits_divide_currency')
+def three_digits_divide_currency(value: int):
+    return '{:,}'.format(value) + 'تومان'
+
+
+

@@ -1,3 +1,4 @@
+{% load poll_extras %}
 {% load thumbnail %}
 
 {% for group in latest_products %}
@@ -12,7 +13,7 @@
                                     <img src="{{ im.url }}" alt="{{ product.title }}">
                                 </a>
                             {% endthumbnail %}
-                            <h2>{{ product.price }}تومان </h2>
+                            <h2>{{ product.price | three_digits_divide_currency }}</h2>
                             <p>{{ product.title }}</p>
                             <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به
                                 سبـد

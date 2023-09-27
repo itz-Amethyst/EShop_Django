@@ -3,8 +3,8 @@ from django.views.generic.base import TemplateView , View
 from django.views.generic import ListView, DetailView
 
 from Site_Module.models import SiteBanner
-from utils.Custom_Methods import SelectSiteBanner
-from .models import Product , ProductCategory , ProductBrand
+from utils.Custom_Methods import SelectSiteBanner , get_client_ip , handle_ip_in_ProductVisit
+from .models import Product , ProductCategory , ProductBrand , ProductVisit
 from django.http import Http404 , HttpRequest
 from django.db.models import Avg , Min , Max , Count
 
@@ -79,6 +79,9 @@ class ProductDetailView(DetailView):
         favorite_product_id = request.session.get('product_favorites')
         context['is_favorite'] = favorite_product_id == str(loaded_product.id)
         context['banner'] = SelectSiteBanner(SiteBanner.SiteBannerPositions.product_detail)
+
+        handle_ip_in_ProductVisit(self.request, loaded_product)
+
         return context
 
     # def get_context_data(self, **kwargs):

@@ -37,7 +37,7 @@ class ProductBrand(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField(max_length = 200 , verbose_name = "نام محصول")
+    title = models.CharField(max_length = 200, verbose_name = "نام محصول")
 
     category = models.ManyToManyField(
         ProductCategory,
@@ -58,6 +58,9 @@ class Product(models.Model):
     slug = models.SlugField(default = "", null = False, db_index = True, blank = True, unique = True, verbose_name = "عنوان در Url" )#*, editable = False*# cant use with prepopulated_fields in admin
     is_deleted = models.BooleanField(verbose_name = "حذف شده / نشده") ## Same as Is active IDK Why he added
     created_date = models.DateTimeField(verbose_name = "تاریخ ساخت" ,auto_now_add = True)
+
+    #! Another way for ProductVisit
+    item_visit_count = models.IntegerField(null = True, blank = True, verbose_name = 'تعداد بازدید محصول')
 
     def get_products_tags( self ):
         return "\n - ".join([p.caption for p in self.product_tags.all()])

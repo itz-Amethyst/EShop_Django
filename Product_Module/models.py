@@ -5,6 +5,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.utils.text import slugify
 
+from Account_Module.models import User
+
+
 # Create your models here.
 
 class ProductCategory(models.Model):
@@ -89,3 +92,15 @@ class ProductTag(models.Model):
 
     def __str__(self):
         return self.caption
+
+class ProductVisit(models.Model):
+    product = models.ForeignKey(to = Product, on_delete = models.CASCADE, verbose_name = 'محصول')
+    ip = models.GenericIPAddressField(max_length = 30, verbose_name = 'آی پی کاربر')
+    user = models.ForeignKey(to = User, null = True, blank = True, verbose_name = 'کاربر مشاهده گر', on_delete = models.CASCADE)
+
+    def __str__(self):
+        return f'{self.product.title} / {self.ip}'
+
+    class Meta:
+        verbose_name = 'بازدید محصول'
+        verbose_name_plural = 'بازدیدهای محصول'

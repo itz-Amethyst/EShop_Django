@@ -27,29 +27,29 @@ def get_client_ip( request: HttpRequest ):
     return ip
 
 
-def handle_ip_in_ProductVisit(request: HttpRequest, object ):
+def handle_ip_in_ProductVisit(request: HttpRequest, object):
     user_ip_address = get_client_ip(request)
     user_id = None
     if request.user.is_authenticated:
         user_id = request.user.id
     # print(user_ip_address)
 
-    has_been_visited = ProductVisit.objects.filter(ip__exact = user_id).exists()
+    has_been_visited = ProductVisit.objects.filter(ip__exact = user_ip_address, product_id = object.id).exists()
     if not has_been_visited:
-        new_visit = ProductVisit(ip = user_id, user_id = user_id, product_id = object.id)
+        new_visit = ProductVisit(ip = user_ip_address, user_id = user_id, product_id = object.id)
         new_visit.save()
 
 
-def handle_ip_in_Product_item_visit_count(request: HttpRequest, object ):
+def handle_ip_in_Product_item_visit_count(request: HttpRequest, object):
     user_ip_address = get_client_ip(request)
     user_id = None
     if request.user.is_authenticated:
         user_id = request.user.id
     # print(user_ip_address)
 
-    has_been_visited = ProductVisit.objects.filter(ip__exact = user_id).exists()
+    has_been_visited = ProductVisit.objects.filter(ip__exact = user_ip_address, product_id = object.id).exists()
     if not has_been_visited:
-        new_visit = ProductVisit(ip = user_id, user_id = user_id, product_id = object.id)
+        new_visit = ProductVisit(ip = user_ip_address, user_id = user_id, product_id = object.id)
         new_visit.save()
         item: Product = Product.objects.filter(id = object.id).first()
         item.item_visit_count += 1

@@ -8,44 +8,7 @@
             {% for group in most_visited_products %}
                 <div class="item {% if forloop.first %} active {% endif %} ">
                     {% for product in group %}
-                        <div class="col-sm-3">
-                            <div class="product-image-wrapper">
-                                <div class="single-products">
-                                    <div class="productinfo text-center">
-                                        {% thumbnail product.image "668x434" crop='center' as im %}
-                                            <a href="{{ product.get_absolute_url }}">
-                                                <img src="{{ im.url }}" alt="{{ product.title }}">
-                                            </a>
-                                        {% endthumbnail %}
-                                        <h2>{{ product.price | three_digits_divide_currency }}</h2>
-                                        <p>{{ product.title }}</p>
-                                        <a href="#" class="btn btn-default add-to-cart"><i
-                                                class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
-                                    </div>
-                                    <a href="{{ product.get_absolute_url }}">
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>{{ product.price | three_digits_divide_currency }}</h2>
-                                                <p>{{ product.title }}</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i
-                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="choose">
-                                    <ul class="nav nav-pills nav-justified">
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-plus-square"></i>لیست علاقه مندی ها
-                                            </a>
-                                        </li>
-                                        <li><a href="#"><i class="fa fa-plus-square"></i>مقایسه</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'partial/product_item_partial.html' with product=product col_size=3 %}
                     {% endfor %}
 
                 </div>

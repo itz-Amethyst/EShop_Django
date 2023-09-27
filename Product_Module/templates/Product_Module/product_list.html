@@ -15,7 +15,7 @@
                         <div class="features_items"><!--features_items-->
                             <h2 class="title text-center">لیست محصولات</h2>
                             {% for product in products %}
-                                {% include 'partial/product_item_partial.html' with product=product %}
+                                {% include 'partial/product_item_partial.html' with product=product col_size=4 %}
                             {% endfor %}
 
                             <div class="clearfix"></div>

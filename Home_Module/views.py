@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
 
-from Product_Module.models import Product
+from Product_Module.models import Product , ProductCategory
 from Site_Module.models import SiteSetting , FooterLinkBox , Slider
-from utils.Custom_Methods import Group_List
+from utils.Custom_Methods import Group_List , Get_Categories_With_Products
 
 
 # Create your views here.
@@ -26,6 +26,7 @@ class HomeView(TemplateView):
 
         context['latest_products'] = Group_List(latest_products, 4)
         context['most_visited_products'] = Group_List(most_visited_products, 4)
+        context['categories_products'] = Get_Categories_With_Products
         print(Group_List(latest_products, 4))
 
         return context

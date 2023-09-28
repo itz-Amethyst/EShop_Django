@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
 
-    exclude = ['created_date']
+    exclude = ['created_date', 'item_visit_count']
 
     # readonly_fields = ['created_date']
     list_display = ['__str__', 'price', 'is_active' ,'get_product_categories' , 'get_products_tags']

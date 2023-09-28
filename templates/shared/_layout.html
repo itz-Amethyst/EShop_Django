@@ -13,6 +13,7 @@
         {% endblock %}
     </title>
     {% include "shared/_headerrefs.html" %}
+    {% block CustomHeaderRefs %}{% endblock %}
 </head><!--/head-->
 
 <body>
@@ -25,5 +26,8 @@
     {% render_partial 'Home_Module.views.Site_Footer_Component_View' %}
 
     {% include "shared/_footerrefs.html" %}
+
+    {% block CustomFooterRefs %}{% endblock %}
+
 </body>
 </html>

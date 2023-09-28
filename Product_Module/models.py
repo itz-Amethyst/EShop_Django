@@ -107,3 +107,15 @@ class ProductVisit(models.Model):
     class Meta:
         verbose_name = 'بازدید محصول'
         verbose_name_plural = 'بازدیدهای محصول'
+
+class ProductGallery(models.Model):
+    product = models.ForeignKey(to = Product, on_delete = models.CASCADE, verbose_name = 'محصول')
+    image = models.ImageField(upload_to = 'images/product-gallery', verbose_name = 'تصویر محصول')
+    is_active = models.BooleanField(default = True, verbose_name = 'فعال / غیرفعال')
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = 'تصویر گالری'
+        verbose_name_plural = 'تصاویر گالری'

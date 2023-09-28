@@ -6,6 +6,15 @@
     {{ product.title }}
 {% endblock %}
 
+{% block CustomHeaderRefs %}
+    <link rel="stylesheet" href="/static/lib/image_lightbox/css/lightbox.min.css">
+{% endblock %}
+
+{% block CustomFooterRefs %}
+    <script src="/static/lib/image_lightbox/js/lightbox.min.js"></script>
+{#    <script src="/static/lib/image_lightbox/js/lightbox-plus-jquery.min.js"></script>#}
+{% endblock %}
+
 {% block Content %}
     <section>
         <div class="container">
@@ -22,11 +31,13 @@
                         <div class="col-sm-5">
                             <div class="view-product">
                                 {% if product.image %}
-                                    <img src="{{ product.image.url }}" alt="">
+                                    <img src="{{ product.image.url }}" alt="" id="main_image">
                                 {% else %}
-                                    <img src="/static/images/product-details/1.jpg" alt="">
+                                    <img src="/static/images/product-details/1.jpg" alt="" id="main_image">
                                 {% endif %}
-                                <h3>بزرگنمایـی</h3>
+                                <h3>
+                                    <a style="color: #fff" id="show_large_image_modal" href="{{ product.image.url }}" data-lightbox="product-image">بزرگنمایـی</a>
+                                </h3>
                             </div>
                             <div id="similar-product" class="carousel slide" data-ride="carousel">
 
@@ -36,7 +47,7 @@
                                         <div class="item {% if forloop.first %} active {% endif %} ">
 
                                             {% for gallery in group %}
-                                                <a href=""><img src="{{ gallery.image.url }}" width="85" height="100" alt="{{ product.title }}"></a>
+                                                <a onclick="ShowLargeImageProduct('{{ gallery.image.url }}')"><img src="{{ gallery.image.url }}" width="85" height="100" alt="{{ product.title }}"></a>
                                             {% endfor %}
 
                                         </div>

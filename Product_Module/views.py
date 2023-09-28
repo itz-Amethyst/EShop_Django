@@ -76,10 +76,14 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         loaded_product = self.object
         request = self.request
+
         favorite_product_id = request.session.get('product_favorites')
+        galleries = list(ProductGallery.objects.filter(product_id = loaded_product.id, is_active = True).all())
+        galleries.insert(0, loaded_product)
+
         context['is_favorite'] = favorite_product_id == str(loaded_product.id)
         context['banner'] = SelectSiteBanner(SiteBanner.SiteBannerPositions.product_detail)
-        context['product_galleries'] = Group_List(list(ProductGallery.objects.filter(product_id = loaded_product.id, is_active = True).all()), 3)
+        context['product_galleries'] = Group_List(galleries, 3)
 
         handle_ip_in_ProductVisit(self.request, loaded_product)
 

@@ -84,6 +84,7 @@ class ProductDetailView(DetailView):
         context['is_favorite'] = favorite_product_id == str(loaded_product.id)
         context['banner'] = SelectSiteBanner(SiteBanner.SiteBannerPositions.product_detail)
         context['product_galleries'] = Group_List(galleries, 3)
+        context['related_products'] = Group_List(list(Product.objects.filter(brand_id = loaded_product.brand_id).exclude(pk = loaded_product.id).all()[:12]), 3)
 
         handle_ip_in_ProductVisit(self.request, loaded_product)
 

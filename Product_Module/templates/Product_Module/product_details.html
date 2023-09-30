@@ -83,7 +83,7 @@
                                         <form action="{% url 'product-favorite' %}" method="post">
                                             {% csrf_token %}
                                             <label>تعداد :</label>
-										    <input min="1" type="hidden" name="product_id" value="1"
+										    <input min="1" type="hidden" id="product_count" value="1"
                                                    class="search_box">
 										    <button onclick="AddProductToOrder({{ product.id }})" type="submit" class="btn btn-fefault cart">
 											    <i class="fa fa-shopping-cart"></i>

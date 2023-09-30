@@ -45,3 +45,9 @@ function ShowLargeImageProduct(imageSrc){
     $('#main_image').attr('src', imageSrc)
     $('#show_large_image_modal').attr('href', imageSrc)
 }
+
+function AddProductToOrder(productId){
+    $.get('/order/add-to-order?product_id=' + productId).then(res=>{
+        console.log(res)
+    })
+}

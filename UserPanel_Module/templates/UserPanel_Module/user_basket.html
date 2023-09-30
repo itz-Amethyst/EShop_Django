@@ -42,18 +42,18 @@
                                 <p>شناسـه : 01010101</p>
                             </td>
                             <td class="cart_price">
-                                <p>590.000 ريال</p>
+                                <p>{{ detail.product.price | three_digits_divide_currency }}</p>
                             </td>
                             <td class="cart_quantity">
                                 <div class="cart_quantity_button">
                                     <a class="cart_quantity_up" href=""> + </a>
-                                    <input class="cart_quantity_input" type="text" name="quantity" value="1"
+                                    <input class="cart_quantity_input" type="text" name="quantity" value="{{ detail.count }}"
                                            autocomplete="off" size="2">
                                     <a class="cart_quantity_down" href=""> - </a>
                                 </div>
                             </td>
                             <td class="cart_total">
-                                <p class="cart_total_price">590.000 ريال</p>
+                                <p class="cart_total_price"> {% multiply_price_checkout detail.count detail.product.price %} </p>
                             </td>
                             <td class="cart_delete">
                                 <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>

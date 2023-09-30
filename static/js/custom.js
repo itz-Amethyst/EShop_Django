@@ -49,6 +49,15 @@ function ShowLargeImageProduct(imageSrc){
 function AddProductToOrder(productId){
     const productCount = $("#product_count").val()
     $.get('/order/add-to-order?product_id=' + productId + "&count=" + productCount).then(res=>{
-        console.log(res)
+        Swal.fire({
+                title: "اعلان",
+                text: res.text,
+                icon: res.icon,
+                confirmButtonText: res.confirm_button_text
+            }).then(confirm =>{
+                if (res.status === 'not_auth'){
+                    window.location.href = '/login'
+                }
+        })
     })
 }

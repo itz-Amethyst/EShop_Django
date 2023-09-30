@@ -15,5 +15,8 @@ def show_jalali_time(value):
 def three_digits_divide_currency(value: int):
     return '{:,}'.format(value) + 'تومان'
 
+@register.simple_tag
+def multiply_price_checkout(quantity, price, *args, **kwargs):
+    return three_digits_divide_currency(quantity * price)
 
 

@@ -33,7 +33,7 @@
                     {% for detail in order.orderdetail_set.all %}
                         <tr>
                             <td class="cart_product">
-                                {% thumbnail detail.product.image "268x250" crop='center' as im %}
+                                {% thumbnail detail.product.image "228x210" crop='center' as im %}
                                     <img src="{{ im.url }}" alt="{{ detail.product.title }}">
                                 {% endthumbnail %}
                             </td>

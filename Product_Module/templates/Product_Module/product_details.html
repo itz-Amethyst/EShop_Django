@@ -80,16 +80,16 @@
 										<span>قیمت : {{ product.price | three_digits_divide_currency }}</span>
 									</span>
                                     <span>
-                                        <form action="{% url 'product-favorite' %}" method="post">
-                                            {% csrf_token %}
+{#                                        <form action="{% url 'product-favorite' %}" method="post">#}
+{#                                            {% csrf_token %}#}
                                             <label>تعداد :</label>
-										    <input min="1" type="hidden" id="product_count" value="1"
+										    <input min="1" type="number" id="product_count" value="1"
                                                    class="search_box">
 										    <button onclick="AddProductToOrder({{ product.id }})" type="submit" class="btn btn-fefault cart">
 											    <i class="fa fa-shopping-cart"></i>
 											افزودن به سبد خرید
 										    </button>
-                                        </form>
+{#                                        </form>#}
 									</span>
                                 </div>
                                 <div>

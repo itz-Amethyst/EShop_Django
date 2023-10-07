@@ -85,7 +85,7 @@ def User_Basket( request: HttpRequest ):
     #     total_amount += order_detail.product.price * order_detail.count
 
     context = {
-        'order': current_order ,
+        'order': current_order,
         'sum': total_amount
     }
     return render(request , 'UserPanel_Module/user_basket.html' , context)
@@ -110,7 +110,6 @@ def remove_order_detail(request: HttpRequest):
 
 
     current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
-    # Todo:
     total_amount = current_order.calculate_total_price()
 
     # detail = current_order.orderdetail_set.filter(id = detail_id).first()
@@ -129,3 +128,33 @@ def remove_order_detail(request: HttpRequest):
         'status': 'success',
         'body': render_to_string('UserPanel_Module/includes/user_basket_content.html', context)
     })
+
+def Change_Order_Count(request: HttpRequest):
+    detail_id = request.GET.get('detail_id')
+    state = request.GET.get('state')
+    if detail_id is None or state is None:
+        return JsonResponse({
+            'status': 'not_found_detail_or_state'
+        })
+
+    order_detail = OrderDetail.objects.filter(id = detail_id, order__user_id = request.user.id, order__is_paid = False).first()
+
+    if order_detail is None:
+        return JsonResponse({
+            'status': 'not_found_detail_or_state'
+        })
+
+    if state == 'increase':
+        order_detail.count += 1
+        order_detail.save()
+
+    elif state == "decrease":
+        if order_detail.count == 1:
+            order_detail.delete()
+        else:
+            order_detail.count -= 1
+            order_detail.save()
+    else:
+        return JsonResponse({
+            'status': 'state_invalid'
+        })

@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 from Account_Module.models import User
 from Order_Module.models import Order , OrderDetail
 from UserPanel_Module.forms import EditProfileModelForm , ChangePasswordForm
+from utils.Custom_Methods import Get_CurrentOrder_And_Price
 
 
 # Create your views here.
@@ -27,20 +28,20 @@ class EditUserProfile(View):
         current_user = GetCurrentUser(request)
         edit_form = EditProfileModelForm(instance = current_user)
         context = {
-            'form': edit_form,
+            'form': edit_form ,
         }
         return render(request , 'UserPanel_Module/EditProfile.html' , context)
 
     def post( self , request: HttpRequest ):
         current_user = GetCurrentUser(request)
-        edit_form = EditProfileModelForm(request.POST, request.FILES , instance = current_user)
+        edit_form = EditProfileModelForm(request.POST , request.FILES , instance = current_user)
         if edit_form.is_valid():
             edit_form.save(commit = True)
         context = {
             'form': edit_form
         }
 
-        return render(request, 'UserPanel_Module/EditProfile.html', context)
+        return render(request , 'UserPanel_Module/EditProfile.html' , context)
 
 
 class ChangePassword(View):
@@ -74,33 +75,31 @@ def UserPanelMenuComponent( request: HttpRequest ):
     context = {
         'current_user': current_user
     }
-    return render(request, 'UserPanel_Module/components/UserSidebar.html' , context)
+    return render(request , 'UserPanel_Module/components/UserSidebar.html' , context)
 
 
 def User_Basket( request: HttpRequest ):
-    current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
-    total_amount = current_order.calculate_total_price()
+    current_order , total_amount = Get_CurrentOrder_And_Price(request)
 
     # for order_detail in current_order.orderdetail_set.all():
     #     total_amount += order_detail.product.price * order_detail.count
 
     context = {
-        'order': current_order,
+        'order': current_order ,
         'sum': total_amount
     }
-    return render(request , 'UserPanel_Module/user_basket.html' , context)
+    return render(request , 'UserPanel_Module/User_Basket.html' , context)
 
 
-def remove_order_detail(request: HttpRequest):
-
+def remove_order_detail( request: HttpRequest ):
     detail_id = request.GET.get('detail_id')
     if detail_id is None:
-
         return JsonResponse({
             'status': 'not_found_detail_id'
         })
 
-    deleted_count, deleted_dict = OrderDetail.objects.filter(id=detail_id, order__is_paid=False, order__user_id=request.user.id).delete()
+    deleted_count , deleted_dict = OrderDetail.objects.filter(id = detail_id , order__is_paid = False ,
+                                                              order__user_id = request.user.id).delete()
     print(deleted_dict)
 
     if deleted_count == 0:
@@ -108,26 +107,24 @@ def remove_order_detail(request: HttpRequest):
             'status': 'detail_not_found'
         })
 
-
-    current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
-    total_amount = current_order.calculate_total_price()
+    current_order , total_amount = Get_CurrentOrder_And_Price(request)
 
     # detail = current_order.orderdetail_set.filter(id = detail_id).first()
     # detail.delete()
-
 
     # for order_detail in current_order.orderdetail_set.all().exclude(id=detail_id):
     #     total_amount += order_detail.product.price * order_detail.count
 
     context = {
-        'order': current_order,
+        'order': current_order ,
         'sum': total_amount
     }
 
     return JsonResponse({
-        'status': 'success',
-        'body': render_to_string('UserPanel_Module/includes/user_basket_content.html', context)
+        'status': 'success' ,
+        'body': render_to_string('UserPanel_Module/includes/user_basket_content.html' , context)
     })
+
 
 def Change_Order_Count(request: HttpRequest):
     detail_id = request.GET.get('detail_id')
@@ -137,7 +134,7 @@ def Change_Order_Count(request: HttpRequest):
             'status': 'not_found_detail_or_state'
         })
 
-    order_detail = OrderDetail.objects.filter(id = detail_id, order__user_id = request.user.id, order__is_paid = False).first()
+    order_detail = OrderDetail.objects.filter(id = detail_id, order__user_id = request.user.id,order__is_paid = False).first()
 
     if order_detail is None:
         return JsonResponse({
@@ -148,7 +145,7 @@ def Change_Order_Count(request: HttpRequest):
         order_detail.count += 1
         order_detail.save()
 
-    elif state == "decrease":
+    elif state == 'decrease':
         if order_detail.count == 1:
             order_detail.delete()
         else:
@@ -158,3 +155,14 @@ def Change_Order_Count(request: HttpRequest):
         return JsonResponse({
             'status': 'state_invalid'
         })
+
+    current_order, total_amount = Get_CurrentOrder_And_Price(request)
+
+    context = {
+        'order': current_order,
+        'sum': total_amount
+    }
+    return JsonResponse({
+        'status': 'success',
+        'body': render_to_string('UserPanel_Module/includes/user_basket_content.html' , context)
+    })

@@ -1,6 +1,7 @@
 from django.db.models import Count
 from django.http import HttpRequest
 
+from Order_Module.models import Order
 from Product_Module.models import ProductVisit , Product , ProductCategory
 from Site_Module.models import SiteBanner
 
@@ -68,3 +69,10 @@ def Get_Categories_With_Products():
         }
         categories_product.append(item)
     return categories_product
+
+
+def Get_CurrentOrder_And_Price(request: HttpRequest):
+    current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
+    total_amount = current_order.calculate_total_price()
+
+    return current_order, total_amount

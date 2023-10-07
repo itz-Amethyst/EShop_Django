@@ -6,6 +6,19 @@
 
 {% block Content %}
     <div id="order-detail-content">
-        {% include 'UserPanel_Module/includes/user_basket_content.html' %}
+        {% if order.orderdetail_set.all %}
+            {% include 'UserPanel_Module/includes/user_basket_content.html' %}
+        {% else %}
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning">
+                            <p>سبد خرید شما خالی میباشد</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

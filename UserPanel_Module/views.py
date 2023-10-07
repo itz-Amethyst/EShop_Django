@@ -27,20 +27,20 @@ class EditUserProfile(View):
         current_user = GetCurrentUser(request)
         edit_form = EditProfileModelForm(instance = current_user)
         context = {
-            'form': edit_form ,
+            'form': edit_form,
         }
         return render(request , 'UserPanel_Module/EditProfile.html' , context)
 
     def post( self , request: HttpRequest ):
         current_user = GetCurrentUser(request)
-        edit_form = EditProfileModelForm(request.POST , request.FILES , instance = current_user)
+        edit_form = EditProfileModelForm(request.POST, request.FILES , instance = current_user)
         if edit_form.is_valid():
             edit_form.save(commit = True)
         context = {
             'form': edit_form
         }
 
-        return render(request , 'UserPanel_Module/EditProfile.html' , {})
+        return render(request, 'UserPanel_Module/EditProfile.html', context)
 
 
 class ChangePassword(View):
@@ -74,16 +74,15 @@ def UserPanelMenuComponent( request: HttpRequest ):
     context = {
         'current_user': current_user
     }
-    return render(request , 'UserPanel_Module/components/UserSidebar.html' , context)
+    return render(request, 'UserPanel_Module/components/UserSidebar.html' , context)
 
 
 def User_Basket( request: HttpRequest ):
-    current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False ,
-                                                                                              user_id = request.user.id)
-    total_amount = 0
+    current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
+    total_amount = current_order.calculate_total_price()
 
-    for order_detail in current_order.orderdetail_set.all():
-        total_amount += order_detail.product.price * order_detail.count
+    # for order_detail in current_order.orderdetail_set.all():
+    #     total_amount += order_detail.product.price * order_detail.count
 
     context = {
         'order': current_order ,
@@ -102,6 +101,7 @@ def remove_order_detail(request: HttpRequest):
         })
 
     deleted_count, deleted_dict = OrderDetail.objects.filter(id=detail_id, order__is_paid=False, order__user_id=request.user.id).delete()
+    print(deleted_dict)
 
     if deleted_count == 0:
         return JsonResponse({

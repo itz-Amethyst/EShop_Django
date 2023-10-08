@@ -163,6 +163,10 @@ EMAIL_HOST_USER = 'pransermi@gmail.com'
 EMAIL_HOST_PASSWORD = 'fygrifnzzojkwlse'
 EMAIL_PORT = 587
 
+# ZarinPal
+SANDBOX = True
+MERCHANT = "c632f574-bd37-15e7-99ca-000c295eb9d3"
+
 # default settings (optional)
 JALALI_DATE_DEFAULTS = {
    'Strftime': {

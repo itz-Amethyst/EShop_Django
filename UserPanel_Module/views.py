@@ -1,5 +1,6 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest , JsonResponse
 from django.shortcuts import render , redirect
 from django.template.loader import render_to_string
@@ -11,6 +12,7 @@ from Account_Module.models import User
 from Order_Module.models import Order , OrderDetail
 from UserPanel_Module.forms import EditProfileModelForm , ChangePasswordForm
 from utils.Custom_Methods import Get_CurrentOrder_And_Price
+from django.utils.decorators import method_decorator
 
 
 # Create your views here.
@@ -19,10 +21,12 @@ def GetCurrentUser( request: HttpRequest ):
     return User.objects.filter(id = request.user.id).first()
 
 
+@method_decorator(login_required , name = 'dispatch')
 class UserPanelDashboardClass(TemplateView):
     template_name = 'UserPanel_Module/UserPanelDashboard.html'
 
 
+@method_decorator(login_required , name = 'dispatch')
 class EditUserProfile(View):
     def get( self , request: HttpRequest ):
         current_user = GetCurrentUser(request)
@@ -44,6 +48,7 @@ class EditUserProfile(View):
         return render(request , 'UserPanel_Module/EditProfile.html' , context)
 
 
+@method_decorator(login_required, name = 'dispatch')
 class ChangePassword(View):
     def get( self , request: HttpRequest ):
         context = {
@@ -69,7 +74,7 @@ class ChangePassword(View):
         return render(request , 'UserPanel_Module/ChangePassword.html' , context)
 
 
-@login_required
+@method_decorator(login_required, name = 'dispatch')
 def UserPanelMenuComponent( request: HttpRequest ):
     current_user = GetCurrentUser(request)
     context = {
@@ -79,7 +84,7 @@ def UserPanelMenuComponent( request: HttpRequest ):
 
 
 def User_Basket( request: HttpRequest ):
-    current_order , total_amount = Get_CurrentOrder_And_Price(request)
+    current_order, total_amount = Get_CurrentOrder_And_Price(request)
 
     # for order_detail in current_order.orderdetail_set.all():
     #     total_amount += order_detail.product.price * order_detail.count
@@ -88,10 +93,10 @@ def User_Basket( request: HttpRequest ):
         'order': current_order ,
         'sum': total_amount
     }
-    return render(request , 'UserPanel_Module/User_Basket.html' , context)
+    return render(request, 'UserPanel_Module/User_Basket.html' , context)
 
 
-def remove_order_detail( request: HttpRequest ):
+def remove_order_detail( request: HttpRequest):
     detail_id = request.GET.get('detail_id')
     if detail_id is None:
         return JsonResponse({
@@ -126,7 +131,7 @@ def remove_order_detail( request: HttpRequest ):
     })
 
 
-def Change_Order_Count(request: HttpRequest):
+def Change_Order_Count( request: HttpRequest ):
     detail_id = request.GET.get('detail_id')
     state = request.GET.get('state')
     if detail_id is None or state is None:
@@ -134,7 +139,8 @@ def Change_Order_Count(request: HttpRequest):
             'status': 'not_found_detail_or_state'
         })
 
-    order_detail = OrderDetail.objects.filter(id = detail_id, order__user_id = request.user.id,order__is_paid = False).first()
+    order_detail = OrderDetail.objects.filter(id = detail_id , order__user_id = request.user.id ,
+                                              order__is_paid = False).first()
 
     if order_detail is None:
         return JsonResponse({
@@ -156,13 +162,13 @@ def Change_Order_Count(request: HttpRequest):
             'status': 'state_invalid'
         })
 
-    current_order, total_amount = Get_CurrentOrder_And_Price(request)
+    current_order , total_amount = Get_CurrentOrder_And_Price(request)
 
     context = {
-        'order': current_order,
+        'order': current_order ,
         'sum': total_amount
     }
     return JsonResponse({
-        'status': 'success',
+        'status': 'success' ,
         'body': render_to_string('UserPanel_Module/includes/user_basket_content.html' , context)
     })

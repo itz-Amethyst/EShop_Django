@@ -99,6 +99,8 @@ DATABASES = {
 #! Note: If you tell the auth User like this Account_Module.Models.User with importing way it would cause an error !
 AUTH_USER_MODEL = 'Account_Module.User'
 
+LOGIN_URL = '/login'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

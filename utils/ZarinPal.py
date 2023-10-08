@@ -21,22 +21,10 @@ email = 'pransermi@gmail.com'  # Optional
 CallbackURL = 'http://127.0.0.1:8080/order/verify-payment/'
 
 
-def Send_Request( request: HttpRequest ):
-    data = {
-        'MerchantID': settings.MERCHANT ,
-        'Amount': amount ,
-        'Description': description ,
-        'Phone': phone ,
-        'CallbackURL': CallbackURL ,
-    }
-
-    data = json.dumps(data)
-
-    headers = {'content-type': 'application/json' , 'content-length': str(len(data))}
-
+def Send_Request(request: HttpRequest):
     try:
 
-        response = requests.post(ZP_API_REQUEST , data = data , headers = headers , timeout = 10)
+        response = Send_Request_For_ZarinPal(flag = True , ZarinPal_Api = ZP_API_REQUEST)
 
         if response.status_code == 200:
             response = response.json()
@@ -51,3 +39,40 @@ def Send_Request( request: HttpRequest ):
         return {'status': False, 'code': 'timeout'}
     except requests.exceptions.ConnectionError:
         return {'status': False, 'code': 'connection error'}
+
+
+def Verify(authority):
+    response = Send_Request_For_ZarinPal(authority = authority , ZarinPal_Api = ZP_API_VERIFY)
+
+    if response.status_code == 200:
+        response = response.json()
+        if response['Status'] == 100:
+            return {'status': True, 'RefID': response['RefID']}
+        else:
+            return {'status': False, 'code': str(response['Status'])}
+
+    return response
+
+
+def Send_Request_For_ZarinPal(authority, ZarinPal_Api, flag = False):
+    if flag:
+        data = {
+            'MerchantID': settings.MERCHANT,
+            'Amount': amount,
+            'Description': description,
+            'Phone': phone,
+            'CallbackURL': CallbackURL,
+        }
+    else:
+        data = {
+            'MerchantID': settings.MERCHANT,
+            'Amount': amount,
+            'Authority': authority
+        }
+
+    data = json.dumps(data)
+
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+    response = requests.post(ZarinPal_Api, data = data, headers = headers, timeout = 10 if flag else None)
+
+    return response

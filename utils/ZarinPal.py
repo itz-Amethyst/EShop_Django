@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpRequest
 import json
 
-from django.shortcuts import redirect , render
+from django.shortcuts import redirect, render
 
 if settings.SANDBOX:
     environment = 'sandbox'
@@ -77,7 +77,8 @@ def Verify( authority , total_price ):
     if response.status_code == 200:
         response = response.json()
         if response['Status'] == 100:
-            return {'success': f'تراکنش شما با کد پیگیری {response["data"]["ref_id"]} با موفقیت انجام شد'}
+            data = {'success': f'تراکنش شما با کد پیگیری {response["RefID"]} با موفقیت انجام شد'}
+            return data
             # return {'status': True, 'RefID': response['RefID']}
             # return render(request, 'Order_Module/Payment_Result.html', {
             #     'success': f'تراکنش شما با کد پیگیری {response["data"]["ref_id"]} با موفقیت انجام شد'
@@ -90,6 +91,7 @@ def Verify( authority , total_price ):
         #     'error': str(response["data"]['message'])
         # })
         else:
-            return {'error': str(response["data"]["message"])}
+            data = {'error': str(response["data"]["message"])}
+            return data
 
     return response

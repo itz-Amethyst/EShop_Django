@@ -38,7 +38,7 @@ def Add_Product_To_Order( request: HttpRequest ):
                 new_detail = OrderDetail(order_id = current_order.id, product_id = product_id, count = count)
                 new_detail.save()
                 # i know it's fucked up but what should i do tell this to bitch ordookhani
-                new_detail.final_price_per_item = current_order.calculate_total_price()
+                new_detail.final_price_per_item = current_order.calculate_total_price(product_id = product_id)
                 new_detail.save()
 
             return JsonResponse({

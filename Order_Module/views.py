@@ -24,7 +24,7 @@ def Add_Product_To_Order( request: HttpRequest ):
         })
 
     if request.user.is_authenticated:
-        product = Product.objects.filter(id = product_id , is_active = True , is_deleted = False).first()
+        product = Product.objects.filter(id = product_id, is_active = True , is_deleted = False).first()
 
         if product != None:
 
@@ -35,7 +35,10 @@ def Add_Product_To_Order( request: HttpRequest ):
                 current_order_detail.count += count
                 current_order_detail.save()
             else:
-                new_detail = OrderDetail(order_id = current_order.id , product_id = product_id , count = count)
+                new_detail = OrderDetail(order_id = current_order.id, product_id = product_id, count = count)
+                new_detail.save()
+                # i know it's fucked up but what should i do tell this to bitch ordookhani
+                new_detail.final_price = current_order.calculate_total_price()
                 new_detail.save()
 
             return JsonResponse({

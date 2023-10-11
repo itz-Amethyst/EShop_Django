@@ -71,8 +71,8 @@ def Get_Categories_With_Products():
     return categories_product
 
 
-def Get_CurrentOrder_And_Price(request: HttpRequest):
+def Get_CurrentOrder_And_Price(request: HttpRequest, flag=False):
     current_order, created = Order.objects.prefetch_related('orderdetail_set').get_or_create(is_paid = False, user_id = request.user.id)
-    total_amount = current_order.calculate_total_price()
+    total_amount = current_order.calculate_total_price(flag = True)
 
     return current_order, total_amount

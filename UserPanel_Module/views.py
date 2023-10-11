@@ -88,7 +88,7 @@ def UserPanelMenuComponent( request: HttpRequest ):
 @login_required
 def User_Basket(request: HttpRequest):
 
-    current_order, total_amount = Get_CurrentOrder_And_Price(request)
+    current_order, total_amount = Get_CurrentOrder_And_Price(request, flag = True)
 
     # for order_detail in current_order.orderdetail_set.all():
     #     total_amount += order_detail.product.price * order_detail.count
@@ -153,9 +153,7 @@ def Change_Order_Count( request: HttpRequest ):
 
     if state == 'increase':
         order_detail.count += 1
-        # for total_price to fix count in db
-        order_detail.save()
-        order_detail.final_price = current_order.calculate_total_price()
+        order_detail.final_price_per_item = current_order.calculate_total_price()
         order_detail.save()
 
     elif state == 'decrease':
@@ -163,8 +161,6 @@ def Change_Order_Count( request: HttpRequest ):
             order_detail.delete()
         else:
             order_detail.count -= 1
-            # for total_price to fix count in db
-            order_detail.save()
             order_detail.final_price = current_order.calculate_total_price()
             order_detail.save()
     else:
@@ -188,7 +184,8 @@ def Change_Order_Count( request: HttpRequest ):
 class MyShops_History(ListView):
     model = Order
     template_name = 'UserPanel_Module/UserShops_History.html'
-    paginate_by = 2
+    # FIX this later
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()

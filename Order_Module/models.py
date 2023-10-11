@@ -22,7 +22,7 @@ class Order(models.Model):
     #
     #     return total_amount
 
-    def calculate_total_price(self, flag=False):
+    def calculate_total_price(self, product_id = None, flag=False):
         total_amount = 0
         if self.is_paid:
             for order_detail in self.orderdetail_set.all():
@@ -30,9 +30,9 @@ class Order(models.Model):
         elif flag:
             for order_detail in self.orderdetail_set.all():
                 total_amount += order_detail.product.price * order_detail.count
-        else:
-            for order_detail in self.orderdetail_set.all():
-                total_amount += order_detail.product.price
+        elif product_id:
+            for order_detail in self.orderdetail_set.filter(product_id = product_id):
+                total_amount = order_detail.product.price
 
         return total_amount
 

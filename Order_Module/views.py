@@ -1,3 +1,4 @@
+from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest , HttpResponse , JsonResponse
 from django.shortcuts import render , redirect
@@ -80,11 +81,11 @@ def Verify_Payment(request: HttpRequest):
     t_authority = request.GET['Authority']
     data = Verify(t_authority, total_price)
     # TODO: later fix this to apply is paid in here something with this refer to video
-    if data['info']:
-        print('yes')
-    elif data['success']:
-        print('no')
-    else:
-        print("Nobody")
+
+    if 'success' in data:
+        current_order.is_paid = True
+        current_order.payment_date = date.today()
+        current_order.save()
+
     return render(request, 'Order_Module/Payment_Result.html', data)
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest , JsonResponse
+from django.http import HttpRequest , JsonResponse , Http404
 from django.shortcuts import render , redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -153,7 +153,7 @@ def Change_Order_Count( request: HttpRequest ):
 
     if state == 'increase':
         order_detail.count += 1
-        order_detail.final_price_per_item = current_order.calculate_total_price()
+        order_detail.final_price_per_item = current_order.calculate_total_price(product_id = order_detail.product_id)
         order_detail.save()
 
     elif state == 'decrease':
@@ -161,7 +161,7 @@ def Change_Order_Count( request: HttpRequest ):
             order_detail.delete()
         else:
             order_detail.count -= 1
-            order_detail.final_price = current_order.calculate_total_price()
+            order_detail.final_price_per_item = current_order.calculate_total_price(product_id = order_detail.product_id)
             order_detail.save()
     else:
         return JsonResponse({
@@ -185,7 +185,7 @@ class MyShops_History(ListView):
     model = Order
     template_name = 'UserPanel_Module/UserShops_History.html'
     # FIX this later
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -194,3 +194,16 @@ class MyShops_History(ListView):
         queryset = queryset.filter(user_id = request.user.id, is_paid = True)
 
         return queryset
+
+
+def Shop_History_Detail(request: HttpRequest, order_id):
+    order = Order.objects.prefetch_related('orderdetail_set').filter(id = order_id, user_id = request.user.id).first()
+
+    if order is None:
+        raise Http404('سبد خرید مورد نظر بافت نشد')
+
+
+
+    return render(request, 'UserPanel_Module/UserShop_History_Detail.html', {
+        'order': order
+    })

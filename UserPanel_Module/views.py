@@ -80,20 +80,24 @@ def UserPanelMenuComponent( request: HttpRequest ):
     context = {
         'current_user': current_user
     }
-    return render(request , 'UserPanel_Module/components/UserSidebar.html' , context)
+    return render(request, 'UserPanel_Module/components/UserSidebar.html' , context)
 
 
-def User_Basket( request: HttpRequest ):
+#! Fix later with this method it will only accept if user is logged so make it to get order by another way insted of id
+# @method_decorator(login_required, name = 'dispatch')
+@login_required
+def User_Basket(request: HttpRequest):
+
     current_order, total_amount = Get_CurrentOrder_And_Price(request)
 
     # for order_detail in current_order.orderdetail_set.all():
     #     total_amount += order_detail.product.price * order_detail.count
 
     context = {
-        'order': current_order ,
+        'order': current_order,
         'sum': total_amount
     }
-    return render(request, 'UserPanel_Module/User_Basket.html' , context)
+    return render(request, 'UserPanel_Module/User_Basket.html', context)
 
 
 def remove_order_detail( request: HttpRequest):

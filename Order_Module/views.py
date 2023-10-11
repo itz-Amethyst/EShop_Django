@@ -38,7 +38,7 @@ def Add_Product_To_Order( request: HttpRequest ):
                 new_detail = OrderDetail(order_id = current_order.id, product_id = product_id, count = count)
                 new_detail.save()
                 # i know it's fucked up but what should i do tell this to bitch ordookhani
-                new_detail.final_price = current_order.calculate_total_price()
+                new_detail.final_price_per_item = current_order.calculate_total_price()
                 new_detail.save()
 
             return JsonResponse({
@@ -68,7 +68,7 @@ def Add_Product_To_Order( request: HttpRequest ):
 def Request_Payment(request: HttpRequest):
 
     current_order, created = Order.objects.get_or_create(is_paid = False , user_id = request.user.id)
-    total_price = current_order.calculate_total_price()
+    total_price = current_order.calculate_total_price(flag = True)
     if total_price == 0:
         return redirect(reverse('user_basket_page'))
 
@@ -78,7 +78,7 @@ def Request_Payment(request: HttpRequest):
 @login_required
 def Verify_Payment(request: HttpRequest):
     current_order, created = Order.objects.get_or_create(is_paid = False, user_id = request.user.id)
-    total_price = current_order.calculate_total_price()
+    total_price = current_order.calculate_total_price(flag = True)
     if total_price == 0:
         return redirect(reverse('user_basket_page'))
     t_authority = request.GET['Authority']
@@ -88,6 +88,7 @@ def Verify_Payment(request: HttpRequest):
     if 'success' in data:
         current_order.is_paid = True
         current_order.payment_date = date.today()
+        current_order.total_price = total_price
         current_order.save()
 
     return render(request, 'Order_Module/Payment_Result.html', data)

@@ -27,7 +27,7 @@
                     	<tr>
                             <td class="text-right">{{ order.id }}</td>
                             <td class="text-right">{{ order.payment_date | show_jalali_date }}</td>
-                            <td class="text-right">{{ order.calculate_total_price | three_digits_divide_currency}}</td>
+                            <td class="text-right">{{ order.total_price | three_digits_divide_currency}}</td>
                             <td class="text-right">{{ order.orderdetail_set.count }}</td>
                             {% if order.is_paid %}
                                 <td class="text-right"><i class="fa fa-check-circle-o"></i></td>

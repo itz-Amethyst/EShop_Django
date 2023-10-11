@@ -6,7 +6,7 @@ from django.shortcuts import render , redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView , ListView
 
 from Account_Module.models import User
 from Order_Module.models import Order , OrderDetail
@@ -74,7 +74,7 @@ class ChangePassword(View):
         return render(request , 'UserPanel_Module/ChangePassword.html' , context)
 
 
-@method_decorator(login_required, name = 'dispatch')
+@login_required
 def UserPanelMenuComponent( request: HttpRequest ):
     current_user = GetCurrentUser(request)
     context = {
@@ -142,8 +142,8 @@ def Change_Order_Count( request: HttpRequest ):
         return JsonResponse({
             'status': 'not_found_detail_or_state'
         })
-
-    order_detail = OrderDetail.objects.filter(id = detail_id , order__user_id = request.user.id ,
+    current_order = Order.objects.get(is_paid = False, user_id = request.user.id)
+    order_detail: OrderDetail = OrderDetail.objects.filter(id = detail_id , order__user_id = request.user.id ,
                                               order__is_paid = False).first()
 
     if order_detail is None:
@@ -153,6 +153,9 @@ def Change_Order_Count( request: HttpRequest ):
 
     if state == 'increase':
         order_detail.count += 1
+        # for total_price to fix count in db
+        order_detail.save()
+        order_detail.final_price = current_order.calculate_total_price()
         order_detail.save()
 
     elif state == 'decrease':
@@ -160,6 +163,9 @@ def Change_Order_Count( request: HttpRequest ):
             order_detail.delete()
         else:
             order_detail.count -= 1
+            # for total_price to fix count in db
+            order_detail.save()
+            order_detail.final_price = current_order.calculate_total_price()
             order_detail.save()
     else:
         return JsonResponse({
@@ -176,3 +182,18 @@ def Change_Order_Count( request: HttpRequest ):
         'status': 'success' ,
         'body': render_to_string('UserPanel_Module/includes/user_basket_content.html' , context)
     })
+
+
+@method_decorator(login_required, name = 'dispatch')
+class MyShops_History(ListView):
+    model = Order
+    template_name = 'UserPanel_Module/UserShops_History.html'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        request: HttpRequest = self.request
+
+        queryset = queryset.filter(user_id = request.user.id, is_paid = True)
+
+        return queryset

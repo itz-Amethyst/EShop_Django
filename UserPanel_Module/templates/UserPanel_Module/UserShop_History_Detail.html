@@ -3,11 +3,10 @@
 {% load poll_extras %}
 
 {% block Title %}
-    لیست خرید های من
+    جزيیات خرید
 {% endblock %}
 
 {% block Content %}
-
     <div class="container">
         <div class="row">
 
@@ -17,32 +16,38 @@
                 <table class="table table-responsive table-hover table-striped">
                     <tr>
                         <th class="text-right">شناسه</th>
-                        <th class="text-right">تاریخ تایید فاکتور</th>
+                        <th class="text-right">محصول</th>
+                        <th class="text-right">قیمت تک</th>
                         <th class="text-right">قیمت نهایی خرید</th>
                         <th class="text-right">تعداد اقلام</th>
+                        <th class="text-right">تاریخ تایید فاکتور</th>
                         <th class="text-right">نهایی شده</th>
                     </tr>
 
-                    {% for order in object_list %}
-                    	<tr>
-                            <td class="text-right">{{ order.id }}</td>
+                    {% for detail in order.orderdetail_set.all %}
+                        <tr>
+                            <td class="text-right">{{ detail.id }}</td>
+                            <td class="text-right"><a
+                                    href="{{ detail.product.get_absolute_url }}">{{ detail.product.title }}</a></td>
+                            <td class="text-right">{{ detail.final_price_per_item | three_digits_divide_currency }}</td>
+                            <td class="text-right">{% multiply_price_checkout detail.count detail.product.price %}</td>
+                            <td class="text-right">{{ detail.count }}</td>
                             <td class="text-right">{{ order.payment_date | show_jalali_date }}</td>
-                            <td class="text-right">{{ order.total_price | three_digits_divide_currency}}</td>
-                            <td class="text-right">{{ order.orderdetail_set.count }}</td>
-                            {% if order.is_paid %}
+                            {% if detail.is_paid %}
                                 <td class="text-right"><i class="fa fa-check-circle-o"></i></td>
                             {% else %}
                                 <td class="text-right"><i class="fa fa-credit-card"></i></td>
                             {% endif %}
-                            <td>
-                                <a href="{% url 'my_shop_history_detail' order_id=order.id %}" class="btn btn-success">مشاهده جزيیات</a>
-                            </td>
                         </tr>
                     {% endfor %}
 
+
                 </table>
+                <span>
+                    <p>قیمت نهایی</p>
+                    <td>{{ order.total_price | three_digits_divide_currency }}</td>
+                </span>
             </div>
         </div>
     </div>
-
 {% endblock %}

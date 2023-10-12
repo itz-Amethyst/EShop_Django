@@ -67,7 +67,7 @@ def Add_Product_To_Order( request: HttpRequest ):
 @login_required
 def Request_Payment(request: HttpRequest):
 
-    current_order, created = Order.objects.get_or_create(is_paid = False , user_id = request.user.id)
+    current_order, created = Order.objects.get_or_create(is_paid = False, user_id = request.user.id)
     total_price = current_order.calculate_total_price(flag = True)
     if total_price == 0:
         return redirect(reverse('user_basket_page'))

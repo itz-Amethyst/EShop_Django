@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count , Sum
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
@@ -23,11 +23,16 @@ class HomeView(TemplateView):
 
         latest_products = Product.objects.filter(is_active = True, is_deleted = False).order_by('-created_date')[:12]
         most_visited_products = Product.objects.filter(is_active = True, is_deleted = False).annotate(visit_count = Count('productvisit')).order_by('-visit_count')[:12]
+        most_bought_products = Product.objects.filter(orderdetail__order__is_paid = True).annotate(order_count = Sum('orderdetail__count')).order_by('-order_count')[:12]
+
+        for product in most_bought_products:
+            print(f'{product.order_count} - {product.title}')
 
         context['latest_products'] = Group_List(latest_products, 4)
         context['most_visited_products'] = Group_List(most_visited_products, 4)
         context['categories_products'] = Get_Categories_With_Products
-        print(Group_List(latest_products, 4))
+        context['most_bought_products'] = Group_List(most_bought_products, 4)
+        # print(Group_List(latest_products, 4))
 
         return context
 

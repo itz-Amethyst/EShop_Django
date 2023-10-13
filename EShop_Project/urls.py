@@ -28,6 +28,7 @@ urlpatterns = [
     path('contact-us/', include('contact_module.urls')),
     path('articles/', include('Article_Module.urls')),
     path('order/', include('Order_Module.urls')),
+    path('admin-panel/', include('Admin_Panel.urls')),
 
 ]
 

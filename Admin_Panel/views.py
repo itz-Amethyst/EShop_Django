@@ -1,6 +1,6 @@
 from django.http import HttpRequest
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse , reverse_lazy
 from django.views.generic import ListView , UpdateView
 
 from Article_Module.models import Article
@@ -44,4 +44,4 @@ class ArticleEditView(UpdateView):
     model = Article
     template_name = 'Admin_Panel/Articles/EditArticle.html'
     fields = '__all__'
-    success_url = reverse('Admin_Articles')
+    success_url = reverse_lazy('Admin_Articles')

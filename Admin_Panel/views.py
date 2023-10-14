@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import ListView , UpdateView
 
 from Article_Module.models import Article
 
@@ -38,3 +39,9 @@ class ArticlesView(ListView):
         # context['date'] = datetime2jalali(self.request.user.date_joined)
         return context
 
+
+class ArticleEditView(UpdateView):
+    model = Article
+    template_name = 'Admin_Panel/Articles/EditArticle.html'
+    fields = '__all__'
+    success_url = reverse('Admin_Articles')

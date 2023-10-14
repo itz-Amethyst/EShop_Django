@@ -102,28 +102,28 @@
                                 {% endif %}
                             </td>
                             <td>{{ article.created_date | show_jalali_date }}</td>
-                            {#                        <td>#}
-                            {#                            <a permission="@Roles.EditArticle"#}
-                            {#                               class="btn btn-trans btn-warning waves-effect waves-light m-l-15 w-md " asp-page="./Edit"#}
-                            {#                               asp-route-id="@item.Id">#}
-                            {#                                <i class="fa fa-edit m-r-5"></i>ویرایش#}
-                            {#                            </a>#}
-                            {#                            @if (!item.IsDeleted)#}
-                            {#                            {#}
-                            {#                            <a permission="@Roles.DeleteArticle"#}
-                            {#                               class="btn btn-trans btn-danger waves-effect waves-light m-l-15 w-md" asp-page="./Index"#}
-                            {#                               asp-page-handler="DeActive" asp-route-id="@item.Id"><i class="fa fa-ban m-r-5"></i>غیر#}
-                            {#                                فعال#}
-                            {#                                سازی</a>#}
-                            {#                            }#}
-                            {#                            else#}
-                            {#                            {#}
-                            {#                            <a permission="@Roles.DeleteArticle"#}
-                            {#                               class="btn btn-trans btn-success waves-effect waves-light m-l-15 w-md" asp-page="./Index"#}
-                            {#                               asp-page-handler="Active" asp-route-id="@item.Id"><i class="fa fa-check m-r-5"></i>فعال#}
-                            {#                                سازی</a>#}
-                            {#                            }#}
-                            {#                        </td>#}
+                            <td>
+                                <a class="btn btn-trans btn-warning waves-effect waves-light m-l-15 w-md " href="{% url 'admin_edit_article' pk=article.id %}">
+                                    <i class="fa fa-edit m-r-5"></i>ویرایش
+                                </a>
+{#                                @if (!item.IsDeleted)#}
+{#                                {#}
+{#                                <a permission="@Roles.DeleteArticle"#}
+{#                                   class="btn btn-trans btn-danger waves-effect waves-light m-l-15 w-md"#}
+{#                                   asp-page="./Index"#}
+{#                                   asp-page-handler="DeActive" asp-route-id="@item.Id"><i class="fa fa-ban m-r-5"></i>غیر#}
+{#                                    فعال#}
+{#                                    سازی</a>#}
+{#                                }#}
+{#                                else#}
+{#                                {#}
+{#                                <a permission="@Roles.DeleteArticle"#}
+{#                                   class="btn btn-trans btn-success waves-effect waves-light m-l-15 w-md"#}
+{#                                   asp-page="./Index"#}
+{#                                   asp-page-handler="Active" asp-route-id="@item.Id"><i class="fa fa-check m-r-5"></i>فعال#}
+{#                                    سازی</a>#}
+{#                                }#}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

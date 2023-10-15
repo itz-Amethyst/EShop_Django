@@ -1,23 +1,27 @@
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.urls import reverse , reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView , UpdateView
 
 from Article_Module.models import Article
+from utils.Permission_Checker import permission_checker_decorator
 
 
 # Create your views here.
 
 
+
+@permission_checker_decorator
 def Index(request: HttpRequest):
-    return render(request, 'Admin_Panel/Dashboard/Index.html', {})
+    return render(request, 'Admin_Panel/Dashboard/Index.html')
 
 
 def All_Articles(request: HttpRequest):
     return render(request, 'Admin_Panel/Articles/Articles_List.html', {})
 
 
-
+@method_decorator(permission_checker_decorator, name = 'dispatch')
 class ArticlesView(ListView):
     template_name = 'Admin_Panel/Articles/Articles_List.html'
     model = Article
@@ -40,6 +44,7 @@ class ArticlesView(ListView):
         return context
 
 
+@method_decorator(permission_checker_decorator, name = 'dispatch')
 class ArticleEditView(UpdateView):
     model = Article
     template_name = 'Admin_Panel/Articles/EditArticle.html'
